@@ -5,13 +5,13 @@
 		"outDir": "./dist/ts"
 	},
 	"references": [
-		{ "path": "../contract/tsconfig.json" },
-		{ "path": "../indexer/tsconfig.json" },
-		{ "path": "../react-account/tsconfig.json" },
-		{ "path": "../ui/tsconfig.json" },
-		{ "path": "../util-ethers/tsconfig.json" },
-		{ "path": "../util-hooks/tsconfig.json" },
-		{ "path": "../util-metadata/tsconfig.json" }
+		{ "path": "../contract/tsconfig.esm.json" },
+		{ "path": "../indexer/tsconfig.esm.json" },
+		{ "path": "../react-account/tsconfig.esm.json" },
+		{ "path": "../ui/tsconfig.esm.json" },
+		{ "path": "../util-ethers/tsconfig.esm.json" },
+		{ "path": "../util-hooks/tsconfig.esm.json" },
+		{ "path": "../util-metadata/tsconfig.esm.json" }
 	],
 	"include": ["src/**/*"]
 }

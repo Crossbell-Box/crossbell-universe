@@ -4,6 +4,6 @@
 		"rootDir": "./src",
 		"outDir": "./dist/ts"
 	},
-	"references": [{ "path": "../util-ethers/tsconfig.json" }],
+	"references": [{ "path": "../util-ethers/tsconfig.esm.json" }],
 	"include": ["src/**/*"]
 }

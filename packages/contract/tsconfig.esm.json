@@ -5,8 +5,8 @@
 		"outDir": "./dist/ts"
 	},
 	"references": [
-		{ "path": "../indexer/tsconfig.json" },
-		{ "path": "../util-hooks/tsconfig.json" }
+		{ "path": "../indexer/tsconfig.esm.json" },
+		{ "path": "../util-hooks/tsconfig.esm.json" }
 	],
 	"include": ["src/**/*"]
 }

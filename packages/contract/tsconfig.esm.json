@@ -1,0 +1,12 @@
+{
+	"extends": "../../tsconfig.esm.json",
+	"compilerOptions": {
+		"rootDir": "./src",
+		"outDir": "./dist/ts"
+	},
+	"references": [
+		{ "path": "../indexer/tsconfig.json" },
+		{ "path": "../util-hooks/tsconfig.json" }
+	],
+	"include": ["src/**/*"]
+}

@@ -12,7 +12,6 @@
 	"typings": "dist/index.d.ts",
 	"sideEffects": false,
 	"files": [
-		"src",
 		"dist",
 		"package.json"
 	],

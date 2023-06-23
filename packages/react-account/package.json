@@ -12,6 +12,7 @@
 	"typings": "dist/index.d.ts",
 	"sideEffects": false,
 	"files": [
+		"src",
 		"dist",
 		"apis",
 		"modal-config",

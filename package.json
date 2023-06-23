@@ -9,7 +9,7 @@
 	"keywords": [],
 	"scripts": {
 		"build": "run-s clean build:tsup build:tsc build:move-css",
-		"build:move-css": "turbo run move:css",
+		"build:move-css": "lerna run move:css",
 		"build:tsc": "tsc -b packages/*/tsconfig.esm.json --verbose",
 		"build:tsup": "turbo run build",
 		"clean": "turbo run clean",

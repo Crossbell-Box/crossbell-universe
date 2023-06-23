@@ -4,5 +4,12 @@
 		"rootDir": "./src",
 		"outDir": "./dist/ts"
 	},
+	"references": [
+		{ "path": "../contract/tsconfig.json" },
+		{ "path": "../indexer/tsconfig.json" },
+		{ "path": "../util-ethers/tsconfig.json" },
+		{ "path": "../util-hooks/tsconfig.json" },
+		{ "path": "../util-metadata/tsconfig.json" }
+	],
 	"include": ["src/**/*"]
 }

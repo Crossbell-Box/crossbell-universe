@@ -21,7 +21,7 @@
 		"package.json"
 	],
 	"scripts": {
-		"build": "run-s clean build:ts",
+		"build": "build:ts",
 		"build:ts": "tsup",
 		"clean": "rm -rf ./dist"
 	},

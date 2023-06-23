@@ -17,9 +17,9 @@
 		"package.json"
 	],
 	"scripts": {
-		"build": "run-s clean build:ts",
-		"build:ts": "tsup",
-		"clean": "rm -rf ./dist"
+		"build": "tsup",
+		"clean": "rm -rf ./dist",
+		"move:css": "copyfiles -u 1 src/**/*.css dist/ts"
 	},
 	"exports": {
 		".": {

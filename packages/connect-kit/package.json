@@ -8,8 +8,8 @@
 	"author": "Natural Selection Labs",
 	"keywords": [],
 	"main": "dist/index.js",
-	"module": "dist/index.mjs",
-	"typings": "dist/index.d.ts",
+	"module": "dist/ts/index.js",
+	"typings": "dist/ts/index.d.ts",
 	"sideEffects": false,
 	"files": [
 		"dist",
@@ -23,8 +23,8 @@
 	},
 	"exports": {
 		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.mjs",
+			"types": "./dist/ts/index.d.ts",
+			"import": "./dist/ts/index.js",
 			"require": "./dist/index.js"
 		},
 		"./colors.css": "./colors.css",

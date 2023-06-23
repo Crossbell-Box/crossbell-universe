@@ -8,8 +8,8 @@
 	"author": "Natural Selection Labs",
 	"keywords": [],
 	"main": "dist/index.js",
-	"module": "dist/index.mjs",
-	"typings": "dist/index.d.ts",
+	"module": "dist/ts/index.js",
+	"typings": "dist/ts/index.d.ts",
 	"sideEffects": false,
 	"files": [
 		"dist",
@@ -26,33 +26,33 @@
 	},
 	"exports": {
 		".": {
-			"types": "./dist/index.d.ts",
-			"import": "./dist/index.mjs",
+			"types": "./dist/ts/index.d.ts",
+			"import": "./dist/ts/index.js",
 			"require": "./dist/index.js"
 		},
 		"./modal-config": {
-			"types": "./dist/modal-config.d.ts",
-			"import": "./dist/modal-config.mjs",
+			"types": "./dist/ts/modal-config/index.d.ts",
+			"import": "./dist/ts/modal-config/index.js",
 			"require": "./dist/modal-config.js"
 		},
 		"./storage-config": {
-			"types": "./dist/storage-config.d.ts",
-			"import": "./dist/storage-config.mjs",
+			"types": "./dist/ts/storage-config/index.d.ts",
+			"import": "./dist/ts/storage-config/index.js",
 			"require": "./dist/storage-config.js"
 		},
 		"./ssr-config": {
-			"types": "./dist/ssr-config.d.ts",
-			"import": "./dist/ssr-config.mjs",
+			"types": "./dist/ts/ssr-config/index.d.ts",
+			"import": "./dist/ts/ssr-config/index.js",
 			"require": "./dist/ssr-config.js"
 		},
 		"./utils": {
-			"types": "./dist/utils.d.ts",
-			"import": "./dist/utils.mjs",
+			"types": "./dist/ts/utils/index.d.ts",
+			"import": "./dist/ts/utils/index.ts",
 			"require": "./dist/utils.js"
 		},
 		"./apis": {
-			"types": "./dist/apis.d.ts",
-			"import": "./dist/apis.mjs",
+			"types": "./dist/ts/apis/index.d.ts",
+			"import": "./dist/ts/apis/index.js",
 			"require": "./dist/apis.js"
 		},
 		"./package.json": "./package.json"

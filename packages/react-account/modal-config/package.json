@@ -1,5 +1,5 @@
 {
 	"main": "../dist/modal-config.js",
-	"module": "../dist/modal-config.mjs",
-	"typings": "../dist/modal-config.d.ts"
+	"import": "./dist/ts/modal-config.js",
+	"types": "./dist/ts/modal-config.d.ts"
 }

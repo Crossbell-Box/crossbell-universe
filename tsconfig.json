@@ -7,6 +7,8 @@
 		"noUnusedLocals": true,
 		"noImplicitAny": true,
 		"esModuleInterop": true,
+		"incremental": true,
+		"composite": true,
 		"moduleResolution": "bundler",
 		"module": "ESNext",
 		"resolveJsonModule": true,

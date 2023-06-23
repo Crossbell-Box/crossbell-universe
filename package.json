@@ -9,6 +9,7 @@
 	"keywords": [],
 	"scripts": {
 		"build": "turbo run build",
+		"build:tsc": "tsc --build --verbose",
 		"clean": "turbo run clean",
 		"dev:docs": "pnpm --filter 'docs' dev",
 		"format": "run-p format:code format:package",

@@ -21,8 +21,7 @@
 		"package.json"
 	],
 	"scripts": {
-		"build": "build:ts",
-		"build:ts": "tsup",
+		"build": "tsup",
 		"clean": "rm -rf ./dist"
 	},
 	"exports": {

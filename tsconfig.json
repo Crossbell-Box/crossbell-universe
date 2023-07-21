@@ -17,10 +17,12 @@
 		"paths": {
 			"~/scripts/*": ["scripts/*"],
 			"@crossbell/*": ["packages/*/src"],
-			"@crossbell/react-account/*": ["packages/react-account/src/*"]
+			"@crossbell/react-account/*": ["packages/react-account/src/*"],
+			"@crossbell/store/*": ["packages/store/src/*"]
 		}
 	},
 	"references": [
+		{ "path": "packages/store/tsconfig.json" },
 		{ "path": "packages/connect-kit/tsconfig.json" },
 		{ "path": "packages/react-account/tsconfig.json" },
 		{ "path": "packages/contract/tsconfig.json" },

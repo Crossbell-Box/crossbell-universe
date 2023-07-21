@@ -3,16 +3,16 @@ import { useContract } from "@crossbell/contract";
 import { indexer } from "@crossbell/indexer";
 import { isAddressEqual } from "viem";
 
-import { getWithdrawProof } from "../apis";
-import { asyncRetry } from "../utils";
-import { useAccountState } from "./account-state";
+import { getWithdrawProof } from "@crossbell/store/apis";
+import { asyncRetry } from "@crossbell/store/utils";
+import { useCrossbellModel } from "./crossbell-model";
 
 export function useWithdrawEmailAccount(options?: UseMutationOptions) {
-	const account = useAccountState();
+	const account = useCrossbellModel();
 	const contract = useContract();
 
-	const mutation = useMutation(async () => {
-		const { wallet, email } = account;
+	return useMutation(async () => {
+		const { wallet, email } = account.getState();
 
 		if (!wallet || !email) return;
 
@@ -22,14 +22,16 @@ export function useWithdrawEmailAccount(options?: UseMutationOptions) {
 
 		await contract.character.withdrawFromNewbieVilla({
 			toAddress: wallet.address,
-			characterId: email.characterId,
+			characterId: email.character.characterId,
 			nonce: nonce,
 			expires: expires,
 			proof: proof,
 		});
 
 		const character = await asyncRetry(async (RETRY) => {
-			const character = await indexer.character.get(email.characterId);
+			const character = await indexer.character.get(
+				email.character.characterId,
+			);
 
 			return character?.owner && isAddressEqual(character.owner, wallet.address)
 				? character!
@@ -37,11 +39,9 @@ export function useWithdrawEmailAccount(options?: UseMutationOptions) {
 		});
 
 		if (character) {
-			await account.refreshWallet();
-			account.switchCharacter(character);
-			await account.disconnectEmail();
+			await account.wallet.refresh();
+			account.wallet.switchCharacter(character);
+			await account.email.disconnect();
 		}
 	}, options);
-
-	return { ...mutation, account };
 }

@@ -2,9 +2,10 @@ import React from "react";
 import { LoadingOverlay } from "@crossbell/ui";
 import { useRefCallback } from "@crossbell/util-hooks";
 import {
-	useAccountState,
 	useClaimCSBStatus,
 	useWithdrawEmailAccount,
+	useConnectedAccount,
+	useCrossbellModelState,
 } from "@crossbell/react-account";
 
 import { useDynamicScenesModal, Congrats } from "../../../components";
@@ -105,14 +106,14 @@ function BaseConfirmUpgrade({
 	onSwitchScene,
 }: BaseConfirmUpgradeProps) {
 	const { isEligibleToClaim } = useClaimCSBStatus();
-	const character = useAccountState((s) => s.email?.character);
+	const account = useCrossbellModelState(
+		({ wallet, email }) => ({ wallet, email }),
+		[],
+	);
+	const character = useConnectedAccount("email")?.character;
 	const isCSBClaimedRef = React.useRef(false);
 
-	const {
-		account,
-		mutate: withdraw,
-		isLoading,
-	} = useWithdrawEmailAccount({
+	const { mutate: withdraw, isLoading } = useWithdrawEmailAccount({
 		onSuccess() {
 			onSuccess({ isCSBClaimed: isCSBClaimedRef.current });
 		},

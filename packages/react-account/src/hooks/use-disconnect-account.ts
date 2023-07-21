@@ -1,22 +1,16 @@
-import React from "react";
-
 import { useRefCallback } from "@crossbell/util-hooks";
 
 import { useContext } from "../context";
-import { useAccountState } from "./account-state";
+import { useCrossbellModel } from "./crossbell-model";
 
-export function useDisconnectAccount(afterDisconnect_?: () => void) {
+export function useDisconnectAccount(afterDisconnect?: () => void) {
 	const { onDisconnect } = useContext();
-	const [disconnectEmail, disconnectWallet] = useAccountState((s) => [
-		s.disconnectEmail,
-		s.disconnectWallet,
-	]);
-	const afterDisconnect = useRefCallback(afterDisconnect_);
+	const model = useCrossbellModel();
 
-	return React.useCallback(() => {
+	return useRefCallback(() => {
 		onDisconnect();
-		disconnectWallet();
-		disconnectEmail();
-		afterDisconnect();
-	}, [disconnectWallet, disconnectEmail, afterDisconnect]);
+		model.wallet.disconnect();
+		model.email.disconnect();
+		afterDisconnect?.();
+	});
 }

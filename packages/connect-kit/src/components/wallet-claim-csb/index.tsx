@@ -16,16 +16,16 @@ import { showNotification } from "@mantine/notifications";
 import commonStyles from "../../styles.module.css";
 import { TextInput, ActionBtn } from "../../components";
 import {
-	SCOPE_KEY_ACCOUNT_BALANCE,
-	useAccountState,
 	useClaimCSBStatus,
+	useConnectedAccount,
+	useCrossbellModel,
 	useWalletClaimCsb,
 	WalletAccount,
 } from "@crossbell/react-account";
 import { IMAGES, useReCAPTCHA } from "../../utils";
 
 import styles from "./index.module.css";
-import { useMutation, useQueryClient } from "@tanstack/react-query";
+import { useMutation } from "@tanstack/react-query";
 import { asyncRetry } from "@crossbell/react-account/utils";
 import { parseEther } from "viem";
 
@@ -48,7 +48,7 @@ export function WalletClaimCSB({
 	onSkip,
 	claimBtnText,
 }: WalletClaimCSBProps) {
-	const account = useAccountState((s) => s.wallet);
+	const account = useConnectedAccount("wallet");
 	const reCaptcha = useReCAPTCHA();
 	const [tweetLink, setTweetLink] = React.useState("");
 	const {
@@ -207,12 +207,12 @@ function DiscordPendingOverlay({
 	onCancel: () => void;
 	onSuccess: () => void;
 }) {
-	const account = useAccountState((s) => s.wallet);
+	const model = useCrossbellModel();
+	const account = useConnectedAccount();
 	const address = account?.address;
 	const { refetch: refreshBalance } = useBalance({
 		address: address as `0x${string}` | undefined,
 	});
-	const queryClient = useQueryClient();
 
 	const { mutate: checkBalance, isLoading: isCheckingBalance } = useMutation(
 		async () => {
@@ -229,9 +229,7 @@ function DiscordPendingOverlay({
 
 					if (amount) {
 						await refreshBalance();
-						await queryClient.invalidateQueries(
-							SCOPE_KEY_ACCOUNT_BALANCE(account),
-						);
+						await model.refresh();
 						onSuccess();
 					} else {
 						throw "Unable to check claim status";

@@ -9,7 +9,8 @@ import { extractCharacterName } from "@crossbell/util-metadata";
 import { CharacterEntity } from "crossbell";
 import { ScrollArea } from "@mantine/core";
 import {
-	useAccountState,
+	useCrossbellModel,
+	useConnectedAccount,
 	useToggleOpSignOperator,
 } from "@crossbell/react-account";
 
@@ -36,11 +37,10 @@ export function List({
 	hasMore,
 	isLoading,
 }: ListProps) {
-	const [currentCharacterId, switchCharacter] = useAccountState((s) => [
-		s.computed.account?.characterId,
-		s.switchCharacter,
-	]);
-	const isWalletConnected = useAccountState((s) => !!s.wallet);
+	const model = useCrossbellModel();
+	const account = useConnectedAccount();
+	const currentCharacterId = account?.character?.characterId;
+	const isWalletConnected = account?.type === "wallet";
 
 	return (
 		<ScrollArea.Autosize mah="70vh">
@@ -63,7 +63,7 @@ export function List({
 									className={styles.characterItem}
 									title={character.handle}
 									onClick={async () => {
-										switchCharacter(character);
+										model.wallet.switchCharacter(character);
 										afterSelectCharacter(character, {
 											opSignOperatorHasPermissions: hasPermissions,
 										});

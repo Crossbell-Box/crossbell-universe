@@ -7,7 +7,7 @@ import {
 import { useContract } from "@crossbell/contract";
 import { indexer } from "@crossbell/indexer";
 
-import { useAccountState } from "../account-state";
+import { useCrossbellModelState } from "../crossbell-model";
 import { useHandleError } from "../use-handle-error";
 import { useOPSignOperatorHasPermissions } from "../operator-sign";
 import {
@@ -78,11 +78,11 @@ export function createAccountTypeBasedMutationHooks<
 	function useFn(params: Params, options?: Options<Data, Variables>) {
 		const factory = useFactory(params);
 		const queryClient = useQueryClient();
-		const account = useAccountState((s) => s.computed.account);
+		const account = useCrossbellModelState((_, m) => m.getCurrentAccount(), []);
 		const handleError = useHandleError(`Error while ${actionDesc}`);
 		const contract = useContract();
 		const opSignOperatorHasPermissions = useOPSignOperatorHasPermissions({
-			characterId: account?.characterId,
+			characterId: account?.character?.characterId,
 		});
 
 		const mutation = useMutation(

@@ -1,6 +1,6 @@
 import React from "react";
 import { LogoIcon } from "@crossbell/ui";
-import { useAccountState } from "@crossbell/react-account";
+import { useCrossbellModelState } from "@crossbell/react-account";
 
 import {
 	Field,
@@ -26,7 +26,7 @@ export function Confirm({
 	onSkip,
 	Header = DynamicScenesHeader,
 }: ConfirmProps) {
-	const address = useAccountState((s) => s.wallet?.address);
+	const address = useCrossbellModelState((s) => s.wallet?.address, []);
 
 	return (
 		<div className={styles.container}>

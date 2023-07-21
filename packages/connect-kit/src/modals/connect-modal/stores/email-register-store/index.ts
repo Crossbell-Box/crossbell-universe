@@ -1,6 +1,6 @@
 import { showNotification } from "@mantine/notifications";
 import { create } from "zustand";
-import { useAccountState } from "@crossbell/react-account";
+import { CrossbellModel } from "@crossbell/store";
 import { isEmail, createContextStore } from "@crossbell/react-account/utils";
 import {
 	registerSendCodeToEmail,
@@ -35,7 +35,7 @@ export type EmailRegisterStore = EmailSlice &
 
 		sendCode: () => Promise<void>;
 		verifyCode: () => Promise<boolean>;
-		register: () => Promise<boolean>;
+		register: (model: CrossbellModel) => Promise<boolean>;
 	};
 
 export const [EmailRegisterStoreProvider, useEmailRegisterStore] =
@@ -133,7 +133,7 @@ export const [EmailRegisterStoreProvider, useEmailRegisterStore] =
 				}
 			},
 
-			async register() {
+			async register(model) {
 				const { email, code, password, characterName, computed } = get();
 
 				if (
@@ -153,19 +153,15 @@ export const [EmailRegisterStoreProvider, useEmailRegisterStore] =
 					set({ status: ok ? "registered" : "idle" });
 
 					if (ok) {
-						const connectOk = await useAccountState
-							.getState()
-							.connectEmail(token);
+						await model.email.connect(token);
 
-						if (connectOk) {
-							showNotification({
-								color: "green",
-								message: msg,
-								title: "Register",
-							});
-						}
+						showNotification({
+							color: "green",
+							message: msg,
+							title: "Register",
+						});
 
-						return connectOk;
+						return true;
 					} else {
 						showNotification({
 							color: "red",

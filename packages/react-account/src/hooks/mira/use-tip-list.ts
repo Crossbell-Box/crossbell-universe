@@ -1,7 +1,7 @@
 import { useInfiniteQuery } from "@tanstack/react-query";
 import { useContract } from "@crossbell/contract";
 
-import { getMiraTips, GetMiraTipsParams } from "../../apis";
+import { getMiraTips, GetMiraTipsParams } from "@crossbell/store/apis";
 
 export type UseTipListParams = Omit<GetMiraTipsParams, "cursor">;
 

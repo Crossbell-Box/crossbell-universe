@@ -1,6 +1,6 @@
 import { useQuery } from "@tanstack/react-query";
 
-import { faucetGetAddressInfo } from "../../apis";
+import { faucetGetAddressInfo } from "@crossbell/store/apis";
 
 export const SCOPE_KEY_FAUCET_ADDRESS_INFO = (address?: string) => [
 	"faucet",

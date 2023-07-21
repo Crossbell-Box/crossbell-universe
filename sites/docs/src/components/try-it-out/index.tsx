@@ -2,7 +2,7 @@ import React from "react";
 import {
 	useConnectModal,
 	useDisconnectModal,
-	useAccountState,
+	useConnectedAccount,
 } from "@crossbell/connect-kit";
 import { CharacterAvatar } from "@crossbell/ui";
 import { extractCharacterName } from "@crossbell/util-metadata";
@@ -10,7 +10,7 @@ import { extractCharacterName } from "@crossbell/util-metadata";
 export function TryItOut() {
 	const connectModal = useConnectModal();
 	const disconnectModal = useDisconnectModal();
-	const account = useAccountState((s) => s.computed.account);
+	const account = useConnectedAccount();
 	const characterName = extractCharacterName(account?.character);
 	const address = account?.type === "email" ? account.email : account?.address;
 

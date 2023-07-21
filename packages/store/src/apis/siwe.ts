@@ -5,14 +5,16 @@ import {
 	NoteEntity,
 	NoteMetadata,
 } from "crossbell";
-
 import { type Address } from "viem";
+
 import { request } from "./utils";
-import { BaseSigner } from "../context";
+import { BaseSigner } from "../types";
 
 type Siwe = { token: string };
 
-export async function siweSignIn(signer: BaseSigner): Promise<Siwe> {
+export async function siweSignIn(
+	signer: BaseSigner,
+): Promise<Siwe & { address: Address }> {
 	const address = await signer.getAddress();
 
 	if (!address) {
@@ -37,7 +39,7 @@ export async function siweSignIn(signer: BaseSigner): Promise<Siwe> {
 		},
 	});
 
-	return { token };
+	return { token, address };
 }
 
 export function siweGetAccount(siwe: Siwe): Promise<{ address: Address }> {

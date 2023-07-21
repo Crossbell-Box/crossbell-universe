@@ -1,5 +1,5 @@
-import { deleteAccount } from "../apis";
-import { useAccountState } from "./account-state";
+import { deleteAccount } from "@crossbell/store/apis";
+import { useCrossbellModel } from "./crossbell-model";
 import { createAccountTypeBasedMutationHooks } from "./account-type-based-hooks";
 
 export const useDeleteEmailAccount = createAccountTypeBasedMutationHooks(
@@ -9,14 +9,14 @@ export const useDeleteEmailAccount = createAccountTypeBasedMutationHooks(
 		connectType: "email",
 	},
 	() => {
-		const { disconnectEmail } = useAccountState();
+		const model = useCrossbellModel();
 
 		return {
 			async email(_, { account }) {
 				await deleteAccount(account.token);
 			},
 
-			onSuccess: async () => disconnectEmail(),
+			onSuccess: async () => model.email.disconnect(),
 		};
 	},
 );

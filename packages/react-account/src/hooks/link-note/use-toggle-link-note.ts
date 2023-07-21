@@ -2,7 +2,12 @@ import { NoteLinkType } from "@crossbell/indexer";
 import { useDebouncedActionSequence } from "@crossbell/util-hooks";
 import { CharacterEntity, Contract, NoteEntity } from "crossbell";
 
-import { linkNote, unlinkNote, siweUnlinkNote, siweLinkNote } from "../../apis";
+import {
+	linkNote,
+	unlinkNote,
+	siweUnlinkNote,
+	siweLinkNote,
+} from "@crossbell/store/apis";
 import { useHandleError } from "../use-handle-error";
 import {
 	AccountTypeBasedMutationOptions,
@@ -98,10 +103,14 @@ export const useToggleLinkNote = createAccountTypeBasedMutationHooks<
 	const actionSequence = useDebouncedActionSequence({ onError });
 
 	return {
-		async email(variable, { account: { characterId, token }, queryClient }) {
+		async email(variable, { account: { character, token }, queryClient }) {
 			actionSequence.clear();
 
-			const params = getLinkActionParams(characterId, linkType, variable);
+			const params = getLinkActionParams(
+				character.characterId,
+				linkType,
+				variable,
+			);
 
 			const status = await updateLinkStatus({
 				queryClient,
@@ -126,7 +135,7 @@ export const useToggleLinkNote = createAccountTypeBasedMutationHooks<
 			async action(variable, { account, siwe, contract, queryClient }) {
 				actionSequence.clear();
 
-				const characterId = account?.characterId;
+				const characterId = account?.character?.characterId;
 
 				if (characterId) {
 					const params = getLinkActionParams(characterId, linkType, variable);

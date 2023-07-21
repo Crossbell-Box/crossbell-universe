@@ -5,9 +5,9 @@ import {
 	faucetClaim,
 	FaucetClaimParams,
 	faucetGetTransaction,
-} from "../../apis";
+} from "@crossbell/store/apis";
 import { useHandleError } from "../use-handle-error";
-import { asyncRetry } from "../../utils";
+import { asyncRetry } from "@crossbell/store/utils";
 
 export type UseWalletClaimCsbOptions = UseMutationOptions<
 	unknown,

@@ -1,6 +1,6 @@
 import { SCOPE_KEY_CHARACTER, SCOPE_KEY_CHARACTERS } from "@crossbell/indexer";
 
-import { useAccountState } from "./account-state";
+import { useCrossbellModel } from "./crossbell-model";
 import { createAccountTypeBasedMutationHooks } from "./account-type-based-hooks";
 
 export const useDeleteCharacter = createAccountTypeBasedMutationHooks<
@@ -13,7 +13,8 @@ export const useDeleteCharacter = createAccountTypeBasedMutationHooks<
 		connectType: "wallet",
 	},
 	() => {
-		const { refresh } = useAccountState();
+		const model = useCrossbellModel();
+
 		return {
 			wallet: {
 				supportOPSign: false,
@@ -29,7 +30,7 @@ export const useDeleteCharacter = createAccountTypeBasedMutationHooks<
 				return Promise.all([
 					queryClient.invalidateQueries(SCOPE_KEY_CHARACTER(characterId)),
 					queryClient.invalidateQueries(SCOPE_KEY_CHARACTERS(account?.address)),
-					refresh(),
+					model.refresh(),
 				]);
 			},
 		};

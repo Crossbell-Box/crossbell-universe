@@ -4,7 +4,7 @@ import { Tooltip } from "@mantine/core";
 import classNames from "classnames";
 import {
 	useAccountBalance,
-	useAccountState,
+	useConnectedAccount,
 	useClaimCSBStatus,
 	useOpSignBalance,
 } from "@crossbell/react-account";
@@ -18,7 +18,7 @@ import { SceneKind } from "../../types";
 import styles from "./index.module.css";
 
 export function Balance() {
-	const account = useAccountState((s) => s.wallet);
+	const account = useConnectedAccount("wallet");
 	const goTo = useScenesStore((s) => s.goTo);
 	const { balance } = useAccountBalance();
 	const opBalance = useOpSignBalance();

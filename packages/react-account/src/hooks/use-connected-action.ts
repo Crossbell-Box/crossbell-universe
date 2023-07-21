@@ -3,10 +3,11 @@ import { useRefCallback } from "@crossbell/util-hooks";
 import { EMPTY, filter, from, map, Subject, switchMap } from "rxjs";
 import { useAddress } from "@crossbell/contract";
 
-import { useAccountState } from "./account-state";
+import { useCrossbellModel } from "./crossbell-model";
 import { useAccountCharacter } from "./use-account-character";
 import { useIsOpSignEnabled } from "./operator-sign";
 import { modalConfig } from "../modal-config";
+import { CrossbellModel } from "@crossbell/store";
 
 type Callback = () => void;
 type ConnectType = "wallet" | "email" | "any";
@@ -44,6 +45,7 @@ export function useConnectedAction<P extends any[], V>(
 		fallback,
 	}: UseConnectedActionOptions<P, V> = {},
 ): (...params: P) => Promise<V> {
+	const account = useCrossbellModel();
 	const checkIsConnected = useCheckIsConnected({
 		connectType,
 		supportOPSign,
@@ -63,11 +65,11 @@ export function useConnectedAction<P extends any[], V>(
 			return fallback(...params);
 		} else {
 			return new Promise((resolve, reject) => {
-				const { email, wallet } = useAccountState.getState();
+				const { email, wallet } = account.getState();
 				const isEmailConnected = !!email;
-				const previousCharacterId = getCurrentCharacterId();
+				const previousCharacterId = getCurrentCharacterId(account);
 				const callback = () => {
-					const currentCharacterId = getCurrentCharacterId();
+					const currentCharacterId = getCurrentCharacterId(account);
 					const ableToTriggerAction = ((): boolean => {
 						if (currentCharacterId) {
 							if (previousCharacterId) {
@@ -94,18 +96,18 @@ export function useConnectedAction<P extends any[], V>(
 
 				if (connectType === "wallet" && isEmailConnected) {
 					// Email is connected but require wallet connection
-					const emailCharacterId = email.characterId;
+					const emailCharacterId = email.character.characterId;
 
 					autoResume(modalConfig.showUpgradeEmailAccountModal(), () => {
 						const walletCharacterId =
-							useAccountState.getState().wallet?.characterId;
+							account.getState().wallet?.character?.characterId;
 
 						// Check if the account upgrade has been completed.
 						if (emailCharacterId === walletCharacterId) {
 							callback();
 						}
 					});
-				} else if (connectType !== "email" && wallet && !wallet?.characterId) {
+				} else if (connectType !== "email" && wallet && !wallet.character) {
 					// Wallet is connected but no character
 					autoResume(modalConfig.showWalletMintNewCharacterModal(), callback);
 				} else {
@@ -125,16 +127,17 @@ function useCheckIsConnected({
 	supportOPSign: boolean;
 	mustHaveCharacter: boolean;
 }) {
+	const account = useCrossbellModel();
 	const isWalletConnected = !!useAddress();
 	const character = useAccountCharacter();
 	const isOpSignEnabled = useIsOpSignEnabled(character);
 
 	return useRefCallback((): boolean => {
-		const state = useAccountState.getState();
+		const state = account.getState();
 		const isEmailAccountConnected = !!state.email;
 		const isWalletAccountConnected = ((): boolean => {
 			if (state.email) return false;
-			if (mustHaveCharacter && !state.wallet?.characterId) return false;
+			if (mustHaveCharacter && !state.wallet?.character) return false;
 
 			if (supportOPSign && isOpSignEnabled) {
 				return true;
@@ -154,8 +157,8 @@ function useCheckIsConnected({
 	});
 }
 
-function getCurrentCharacterId() {
-	return useAccountState.getState().computed?.account?.characterId;
+function getCurrentCharacterId(account: CrossbellModel) {
+	return account.getCurrentAccount()?.character?.characterId;
 }
 
 function useAutoResume({

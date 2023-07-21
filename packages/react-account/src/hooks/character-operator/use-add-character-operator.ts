@@ -2,8 +2,8 @@ import { indexer } from "@crossbell/indexer";
 import { CharacterPermissionKey } from "crossbell";
 import { type Address } from "viem";
 
-import { asyncRetry } from "../../utils";
-import { useAccountState } from "../account-state";
+import { asyncRetry } from "@crossbell/store/utils";
+import { useCrossbellModel } from "../crossbell-model";
 import { createAccountTypeBasedMutationHooks } from "../account-type-based-hooks";
 import {
 	GET_CHARACTER_OPERATORS_SCOPE_KEY,
@@ -18,34 +18,38 @@ export const useAddCharacterOperator = createAccountTypeBasedMutationHooks<
 		operator: Address;
 		permissions: CharacterPermissionKey[];
 	}
->({ actionDesc: "adding operator", withParams: false }, () => ({
-	wallet: {
-		supportOPSign: false,
+>({ actionDesc: "adding operator", withParams: false }, () => {
+	const account = useCrossbellModel();
 
-		async action({ characterId, operator, permissions }, { contract }) {
-			await contract.operator.grantForCharacter({
-				characterId,
-				operator,
-				permissions,
-			});
+	return {
+		wallet: {
+			supportOPSign: false,
 
-			await asyncRetry(async (RETRY) => {
-				const op = await indexer.operator.getForCharacter(
+			async action({ characterId, operator, permissions }, { contract }) {
+				await contract.operator.grantForCharacter({
 					characterId,
 					operator,
-				);
-				return haveSamePermissions(permissions, op?.permissions) || RETRY;
-			});
-		},
-	},
+					permissions,
+				});
 
-	onSuccess({ queryClient, variables }) {
-		return Promise.all([
-			useAccountState.getState().refresh(),
-			queryClient.invalidateQueries(SCOPE_KEY_CHARACTER_OPERATOR(variables)),
-			queryClient.invalidateQueries(
-				GET_CHARACTER_OPERATORS_SCOPE_KEY(variables),
-			),
-		]);
-	},
-}));
+				await asyncRetry(async (RETRY) => {
+					const op = await indexer.operator.getForCharacter(
+						characterId,
+						operator,
+					);
+					return haveSamePermissions(permissions, op?.permissions) || RETRY;
+				});
+			},
+		},
+
+		onSuccess({ queryClient, variables }) {
+			return Promise.all([
+				account.refresh(),
+				queryClient.invalidateQueries(SCOPE_KEY_CHARACTER_OPERATOR(variables)),
+				queryClient.invalidateQueries(
+					GET_CHARACTER_OPERATORS_SCOPE_KEY(variables),
+				),
+			]);
+		},
+	};
+});

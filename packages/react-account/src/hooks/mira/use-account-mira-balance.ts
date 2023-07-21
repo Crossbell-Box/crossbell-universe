@@ -3,9 +3,12 @@ import { useContract } from "@crossbell/contract";
 import { type Address } from "viem";
 import { type Numberish } from "crossbell";
 
-import { getAddressMiraBalance, getCharacterMiraBalance } from "../../apis";
+import {
+	getAddressMiraBalance,
+	getCharacterMiraBalance,
+} from "@crossbell/store/apis";
 import { useConnectedAccount } from "../use-connected-account";
-import type { AccountBalance } from "../use-account-balance";
+import type { AccountBalance } from "@crossbell/store";
 
 export type UseAccountMiraBalanceResult = {
 	balance: AccountBalance | null;
@@ -28,13 +31,13 @@ export function useAccountMiraBalance(): UseAccountMiraBalanceResult {
 	const { data, isLoading } = useQuery(
 		SCOPE_KEY_ACCOUNT_MIRA_BALANCE({
 			address,
-			characterId: account?.characterId,
+			characterId: account?.character?.characterId,
 		}),
 		() =>
 			account?.type === "email"
 				? getCharacterMiraBalance({
 						contract,
-						characterId: account.characterId,
+						characterId: account.character.characterId,
 				  })
 				: address
 				? getAddressMiraBalance({
@@ -42,7 +45,7 @@ export function useAccountMiraBalance(): UseAccountMiraBalanceResult {
 						address: address!,
 				  })
 				: null,
-		{ enabled: !!address || !!account?.characterId },
+		{ enabled: !!address || !!account?.character?.characterId },
 	);
 
 	return { balance: data ?? null, isLoading };

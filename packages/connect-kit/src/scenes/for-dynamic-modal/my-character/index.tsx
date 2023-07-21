@@ -1,7 +1,10 @@
 import React from "react";
 import compact from "lodash.compact";
 import { useRefCallback } from "@crossbell/util-hooks";
-import { useAccountCharacter, useAccountState } from "@crossbell/react-account";
+import {
+	useAccountCharacter,
+	useConnectedAccount,
+} from "@crossbell/react-account";
 
 import { SelectCharacters } from "../../../scenes";
 
@@ -26,7 +29,7 @@ import { CharacterWidget } from "./components/character-widget";
 import classNames from "classnames";
 
 export function MyCharacter() {
-	const account = useAccountState();
+	const account = useConnectedAccount();
 	const character = useAccountCharacter();
 	const { goTo, goBack } = useDynamicScenesModal();
 
@@ -101,7 +104,7 @@ export function MyCharacter() {
 
 				<SettingsSection
 					items={compact([
-						!!account.email && {
+						account?.type === "email" && {
 							id: "upgrade-email-account",
 							icon: <WalletIcon className={styles.icon} />,
 							title: "Upgrade Account",
@@ -118,10 +121,12 @@ export function MyCharacter() {
 							commonStyles.uxOverlay,
 						)}
 						onClick={
-							account.email ? goToDeleteEmailAccount : goToDeleteCharacter
+							account?.type === "email"
+								? goToDeleteEmailAccount
+								: goToDeleteCharacter
 						}
 					>
-						{account.email ? "Delete Account" : "Delete Character"}
+						{account?.type === "email" ? "Delete Account" : "Delete Character"}
 					</button>
 				)}
 			</div>

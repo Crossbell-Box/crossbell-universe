@@ -1,17 +1,17 @@
 import { useMutation } from "@tanstack/react-query";
 
 import { useContext } from "../../context";
-import { useAccountState } from "../account-state";
+import { useCrossbellModel } from "../crossbell-model";
 
 export function useWalletSignIn() {
-	const siweSignIn = useAccountState((s) => s.siweSignIn);
+	const account = useCrossbellModel();
 	const { getSigner } = useContext();
 
 	return useMutation(async () => {
 		const signer = await getSigner();
 
 		if (signer) {
-			await siweSignIn(signer);
+			await account.wallet.signIn(signer);
 		}
 	});
 }

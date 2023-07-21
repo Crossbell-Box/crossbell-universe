@@ -10,9 +10,9 @@ import {
 import { InitContractProvider } from "@crossbell/contract";
 import { MantineProvider } from "@mantine/core";
 import {
-	useAccountState,
 	ReactAccountProvider,
 	BaseSigner,
+	useCrossbellModel,
 } from "@crossbell/react-account";
 import { useRefCallback } from "@crossbell/util-hooks";
 
@@ -75,9 +75,7 @@ export function ConnectKitProvider({
 	disableOPSign,
 	...connectKitConfig
 }: ConnectKitProviderProps) {
-	const accountState = useAccountState();
 	const account = useAccount();
-	const contractConfig = useContractConfig();
 	const { disconnect } = useDisconnect();
 	const getSigner = useRefCallback(
 		async (): Promise<BaseSigner | undefined> => {
@@ -94,37 +92,19 @@ export function ConnectKitProvider({
 		},
 	);
 
-	React.useEffect(() => {
-		if (account.status === "connected") {
-			accountState.connectWallet(account.address);
-		}
-
-		if (account.status === "disconnected") {
-			if (ignoreWalletDisconnectEvent) {
-				accountState.refreshWallet();
-			} else {
-				accountState.disconnectWallet();
-			}
-		}
-	}, [account.address, account.status]);
-
-	React.useEffect(() => {
-		accountState.refreshEmail();
-		accountState.markSSRReady();
-	}, []);
-
 	usePreloadAllImgs();
 	const colorScheme = useColorScheme();
 
 	const node = (
-		<InitContractProvider {...contractConfig}>
-			<UseWeb2UrlContext.Provider value={ipfsLinkToHttpLink ?? null}>
-				<UrlComposerContext.Provider value={urlComposer ?? null}>
-					<ReactAccountProvider
-						disableOPSign={disableOPSign}
-						getSigner={getSigner}
-						onDisconnect={disconnect}
-					>
+		<UseWeb2UrlContext.Provider value={ipfsLinkToHttpLink ?? null}>
+			<UrlComposerContext.Provider value={urlComposer ?? null}>
+				<ReactAccountProvider
+					disableOPSign={disableOPSign}
+					getSigner={getSigner}
+					onDisconnect={disconnect}
+					getStorage={() => (typeof window === "object" ? localStorage : null)}
+				>
+					<ContractProvider>
 						<ConnectKitConfigContext.Provider value={connectKitConfig}>
 							<XSettingsConfigContext.Provider value={xSettings ?? null}>
 								<MantineProvider theme={{ colorScheme }}>
@@ -144,13 +124,16 @@ export function ConnectKitProvider({
 									<TipModal />
 									<SwitchNetworkModal />
 								</MantineProvider>
+								<SyncConnectStatus
+									ignoreWalletDisconnectEvent={ignoreWalletDisconnectEvent}
+								/>
 								{children}
 							</XSettingsConfigContext.Provider>
 						</ConnectKitConfigContext.Provider>
-					</ReactAccountProvider>
-				</UrlComposerContext.Provider>
-			</UseWeb2UrlContext.Provider>
-		</InitContractProvider>
+					</ContractProvider>
+				</ReactAccountProvider>
+			</UrlComposerContext.Provider>
+		</UseWeb2UrlContext.Provider>
 	);
 
 	return withoutNotificationsProvider ? (
@@ -160,5 +143,42 @@ export function ConnectKitProvider({
 			{node}
 			<Notifications position="bottom-center" zIndex={99999} />
 		</>
+	);
+}
+
+function SyncConnectStatus({
+	ignoreWalletDisconnectEvent,
+}: {
+	ignoreWalletDisconnectEvent?: boolean;
+}) {
+	const model = useCrossbellModel();
+	const account = useAccount();
+
+	React.useEffect(() => {
+		if (account.status === "connected") {
+			model.wallet.connect(account.address);
+		}
+
+		if (account.status === "disconnected") {
+			if (ignoreWalletDisconnectEvent) {
+				model.wallet.refresh();
+			} else {
+				model.wallet.disconnect();
+			}
+		}
+	}, [account.address, account.status]);
+
+	React.useEffect(() => {
+		model.email.refresh();
+	}, [model]);
+
+	return <></>;
+}
+
+function ContractProvider({ children }: React.PropsWithChildren) {
+	const contractConfig = useContractConfig();
+
+	return (
+		<InitContractProvider {...contractConfig}>{children}</InitContractProvider>
 	);
 }

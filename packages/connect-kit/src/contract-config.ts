@@ -1,6 +1,6 @@
 import React from "react";
 import { ContractConfig } from "@crossbell/contract";
-import { useAccountState } from "@crossbell/react-account";
+import { useCrossbellModel } from "@crossbell/react-account";
 import { useAccount } from "wagmi";
 
 import { showNoEnoughCSBModal } from "./modals/no-enough-csb-modal";
@@ -10,6 +10,7 @@ import { showWalletMintNewCharacterModal } from "./modals/wallet-mint-new-charac
 import { showSwitchNetworkModal } from "./modals/switch-network-modal";
 
 export const useContractConfig = () => {
+	const model = useCrossbellModel();
 	const { address, connector } = useAccount();
 	const [provider, setProvider] = React.useState<ContractConfig["provider"]>();
 
@@ -24,7 +25,7 @@ export const useContractConfig = () => {
 			provider,
 
 			openConnectModal() {
-				if (useAccountState.getState().email) {
+				if (model.getCurrentAccount()?.type === "email") {
 					showUpgradeEmailAccountModal();
 				} else {
 					showConnectModal();
@@ -36,7 +37,7 @@ export const useContractConfig = () => {
 			},
 
 			getCurrentCharacterId() {
-				return useAccountState.getState().computed.account?.characterId ?? null;
+				return model.getCurrentAccount()?.character?.characterId ?? null;
 			},
 
 			openMintNewCharacterModel() {
@@ -45,6 +46,6 @@ export const useContractConfig = () => {
 
 			showSwitchNetworkModal,
 		}),
-		[address, provider],
+		[address, provider, model],
 	);
 };

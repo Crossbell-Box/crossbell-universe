@@ -1,7 +1,10 @@
 import { useQuery } from "@tanstack/react-query";
 import { MarkOptional } from "ts-essentials";
 
-import { getNoteLinkCount, GetNoteLinkCountParams } from "../../apis";
+import {
+	getNoteLinkCount,
+	GetNoteLinkCountParams,
+} from "@crossbell/store/apis";
 
 export type UseNoteLinkCountParams = MarkOptional<
 	GetNoteLinkCountParams,

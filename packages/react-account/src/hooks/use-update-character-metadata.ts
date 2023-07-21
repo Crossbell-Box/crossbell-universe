@@ -6,8 +6,8 @@ import {
 	siweUpdateMetadata,
 	updateCharactersMetadata,
 	waitUntilTransactionFinished,
-} from "../apis";
-import { useAccountState } from "./account-state";
+} from "@crossbell/store/apis";
+import { useCrossbellModel } from "./crossbell-model";
 import { createAccountTypeBasedMutationHooks } from "./account-type-based-hooks";
 
 type EditFn = (draft: Draft<CharacterMetadata>) => void;
@@ -21,10 +21,12 @@ export const useUpdateCharacterMetadata = createAccountTypeBasedMutationHooks<
 	Variables,
 	Result
 >({ actionDesc: "setting character metadata", withParams: false }, () => {
+	const model = useCrossbellModel();
+
 	async function prepareData(variable: Variables) {
 		// Make sure character metadata is up-to-date.
-		await useAccountState.getState().refresh();
-		const account = useAccountState.getState().computed.account;
+		await model.refresh();
+		const account = model.getCurrentAccount();
 		const character = await indexer.character.get(variable.characterId);
 
 		if (!account || !character) return null;
@@ -90,7 +92,7 @@ export const useUpdateCharacterMetadata = createAccountTypeBasedMutationHooks<
 
 		onSuccess({ variables, queryClient }) {
 			return Promise.all([
-				useAccountState.getState().refresh(),
+				model.refresh(),
 				queryClient.invalidateQueries(
 					SCOPE_KEY_CHARACTER(variables.characterId),
 				),

@@ -1,5 +1,8 @@
-import { useAccountState } from "./account-state";
+import { useCrossbellModelState } from "./crossbell-model";
 
 export function useAccountCharacter() {
-	return useAccountState((s) => s.computed.account?.character);
+	return useCrossbellModelState(
+		(_, m) => m.getCurrentAccount()?.character ?? null,
+		[],
+	);
 }

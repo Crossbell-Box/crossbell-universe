@@ -1,15 +1,15 @@
 import { useToggleCharacterOperator } from "../character-operator";
-import { useAccountState } from "../account-state";
+import { useCrossbellModelState } from "../crossbell-model";
 
 import { X_SYNC_OPERATOR_ADDRESS, X_SYNC_OPERATOR_PERMISSIONS } from "./consts";
 
 export function useToggleCharacterSyncOperator(): ReturnType<
 	typeof useToggleCharacterOperator
 > {
-	const [isEmail, characterId] = useAccountState((s) => [
-		s.computed.account?.type === "email",
-		s.computed.account?.characterId,
-	]);
+	const [isEmail, characterId] = useCrossbellModelState((_, m) => {
+		const account = m.getCurrentAccount();
+		return [account?.type === "email", account?.character?.characterId];
+	}, []);
 
 	const [{ hasPermissions, toggleOperator }, mutation] =
 		useToggleCharacterOperator({

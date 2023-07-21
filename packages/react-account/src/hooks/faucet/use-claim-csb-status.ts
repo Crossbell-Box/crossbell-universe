@@ -1,4 +1,4 @@
-import { useAccountState } from "../account-state";
+import { useCrossbellModelState } from "../crossbell-model";
 
 import { useFaucetAddressInfo } from "./use-faucet-address-info";
 
@@ -10,7 +10,7 @@ export type UseClaimCSBStatusResult = {
 };
 
 export function useClaimCSBStatus(): UseClaimCSBStatusResult {
-	const address = useAccountState((s) => s.wallet?.address);
+	const address = useCrossbellModelState((s) => s.wallet?.address, []);
 	const { data: addressInfo, isLoading } = useFaucetAddressInfo(address);
 
 	const [isEligibleToClaim, errorMsg] = ((): [boolean, string] => {

@@ -1,7 +1,7 @@
 import { NoteMetadata } from "crossbell";
 import { SCOPE_KEY_FOLLOWING_FEEDS_OF_CHARACTER } from "@crossbell/indexer";
 
-import { putNote, siwePutNote } from "../apis";
+import { putNote, siwePutNote } from "@crossbell/store/apis";
 import { optionalBigint, OptionalBigint } from "../utils";
 
 import { createAccountTypeBasedMutationHooks } from "./account-type-based-hooks";
@@ -17,7 +17,7 @@ export const usePostNote = createAccountTypeBasedMutationHooks<
 	},
 	() => ({
 		async email({ metadata, characterId }, { account }) {
-			if (characterId && account.characterId !== characterId) {
+			if (characterId && account.character.characterId !== characterId) {
 				throw new Error(
 					"Email user cannot use any characterId other than their own.",
 				);
@@ -38,11 +38,16 @@ export const usePostNote = createAccountTypeBasedMutationHooks<
 				{ metadata, characterId: specifiedCharacterId },
 				{ account, siwe, contract },
 			) {
-				const characterId = specifiedCharacterId ?? account.characterId!;
+				const characterId =
+					specifiedCharacterId ?? account?.character?.characterId;
+
+				if (!characterId) {
+					throw new Error("No character");
+				}
 
 				const canUseSiwe = specifiedCharacterId
 					? // TODO: Check if the specified characterId belongs to the current wallet, not just the one currently in use.
-					  specifiedCharacterId === account?.characterId
+					  specifiedCharacterId === account?.character?.characterId
 					: true;
 
 				if (siwe && canUseSiwe) {
@@ -67,7 +72,9 @@ export const usePostNote = createAccountTypeBasedMutationHooks<
 		onSuccess({ queryClient, account }) {
 			return Promise.all([
 				queryClient.invalidateQueries(
-					SCOPE_KEY_FOLLOWING_FEEDS_OF_CHARACTER(account?.characterId),
+					SCOPE_KEY_FOLLOWING_FEEDS_OF_CHARACTER(
+						account?.character?.characterId,
+					),
 				),
 			]);
 		},

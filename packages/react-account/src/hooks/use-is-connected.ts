@@ -1,4 +1,4 @@
-import { GeneralAccount } from "./account-state";
+import { GeneralAccount } from "./crossbell-model";
 import { useConnectedAccount } from "./use-connected-account";
 
 export function useIsConnected(type?: GeneralAccount["type"]): boolean {

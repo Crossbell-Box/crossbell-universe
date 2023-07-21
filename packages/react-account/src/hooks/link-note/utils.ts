@@ -7,12 +7,12 @@ import {
 import { SCOPE_KEY_NOTE_LINK_LIST } from "./use-note-link-list";
 import { SCOPE_KEY_NOTE_LINK_COUNT } from "./use-note-link-count";
 import { SCOPE_KEY_IS_NOTE_LINKED } from "./use-is-note-linked";
-import { asyncRetry } from "../../utils";
+import { asyncRetry } from "@crossbell/store/utils";
 import {
 	getIsNoteLinked,
 	GetIsNoteLinkedConfig,
 	GetIsNoteLinkedResult,
-} from "../../apis";
+} from "@crossbell/store/apis";
 
 export type Action = "link" | "unlink";
 

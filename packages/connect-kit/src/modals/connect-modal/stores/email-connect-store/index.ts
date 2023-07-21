@@ -1,6 +1,6 @@
 import { showNotification } from "@mantine/notifications";
 import { create } from "zustand";
-import { useAccountState } from "@crossbell/react-account";
+import { CrossbellModel } from "@crossbell/store";
 import { isEmail, createContextStore } from "@crossbell/react-account/utils";
 import { connectByEmail } from "@crossbell/react-account/apis";
 
@@ -12,7 +12,7 @@ import { PasswordSlice, createPasswordSlice } from "./password";
 export type EmailConnectStore = EmailSlice &
 	PasswordSlice & {
 		status: "idle" | "connecting" | "connected";
-		connect: () => Promise<void>;
+		connect: (model: CrossbellModel) => Promise<void>;
 
 		computed: {
 			isPending: boolean;
@@ -57,7 +57,7 @@ export const [EmailConnectStoreProvider, useEmailConnectStore] =
 				},
 			},
 
-			async connect() {
+			async connect(model) {
 				const { email, password, computed } = get();
 
 				try {
@@ -67,16 +67,11 @@ export const [EmailConnectStoreProvider, useEmailConnectStore] =
 						const result = await connectByEmail({ email, password });
 
 						if (result.ok) {
-							useAccountState
-								.getState()
-								.connectEmail(result.token)
-								.then((success) => {
-									if (success) {
-										set({ status: "connected", emailErrorMsg: "" });
-										notify.success(result.msg);
-										useConnectModal.getState().hide();
-									}
-								});
+							model.email.connect(result.token).then(() => {
+								set({ status: "connected", emailErrorMsg: "" });
+								notify.success(result.msg);
+								useConnectModal.getState().hide();
+							});
 						} else {
 							if (result.msg.toLowerCase() === "user not found") {
 								const msg = "Haven't Registered yet";

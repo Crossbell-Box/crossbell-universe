@@ -1,7 +1,7 @@
 import { useQuery } from "@tanstack/react-query";
 import { MarkOptional } from "ts-essentials";
 
-import { getIsNoteLinked, GetIsNoteLinkedConfig } from "../../apis";
+import { getIsNoteLinked, GetIsNoteLinkedConfig } from "@crossbell/store/apis";
 
 export type UseIsNoteLinkedParams = MarkOptional<
 	GetIsNoteLinkedConfig,

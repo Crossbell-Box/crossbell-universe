@@ -1,5 +1,9 @@
 import React from "react";
-import { useAccountState, GeneralAccount } from "@crossbell/react-account";
+import {
+	useIsSsrReady,
+	useConnectedAccount,
+	GeneralAccount,
+} from "@crossbell/react-account";
 
 import { useConnectModal } from "../../modals/connect-modal";
 import { useDisconnectModal } from "../../modals/disconnect-modal";
@@ -36,10 +40,8 @@ export function ConnectButton({ children }: ConnectButtonProps): JSX.Element {
 	const connectModal = useConnectModal();
 	const disconnectModal = useDisconnectModal();
 	const selectCharactersModal = useSelectCharactersModal();
-	const [account, ssrReady] = useAccountState((s) => [
-		s.computed.account,
-		s.ssrReady,
-	]);
+	const ssrReady = useIsSsrReady();
+	const account = useConnectedAccount();
 
 	return (
 		<>

@@ -14,7 +14,7 @@ export type ManageOperatorsProps = {
 
 export function ManageOperators({ Header: Header_ }: ManageOperatorsProps) {
 	const Header = Header_ ?? DynamicScenesHeader;
-	const { characterId } = useAccountCharacterId();
+	const characterId = useAccountCharacterId();
 
 	if (!characterId) return null;
 

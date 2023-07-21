@@ -1,7 +1,7 @@
 import type { Numberish } from "crossbell";
 import type { Address } from "viem";
 
-import { getMiraTokenDecimals, emailTip } from "../../apis";
+import { getMiraTokenDecimals, emailTip } from "@crossbell/store/apis";
 import { createAccountTypeBasedMutationHooks } from "../account-type-based-hooks";
 
 import { SCOPE_KEY_TIPS_LIST } from "./use-tip-list";
@@ -24,10 +24,10 @@ export const useTip = createAccountTypeBasedMutationHooks<void, UseTipOptions>(
 				{ characterId, noteId: toNoteId, amount, feeReceiver },
 				{ contract, account },
 			) {
-				if (account.characterId) {
+				if (account.character?.characterId) {
 					const decimal = await getMiraTokenDecimals(contract);
 					const options = {
-						fromCharacterId: account.characterId,
+						fromCharacterId: account.character.characterId,
 						toCharacterId: characterId,
 						amount: BigInt(amount) * BigInt(10) ** BigInt(decimal),
 					};
@@ -75,7 +75,7 @@ export const useTip = createAccountTypeBasedMutationHooks<void, UseTipOptions>(
 					SCOPE_KEY_TIPS_LIST({
 						toCharacterId: characterId,
 						toNoteId: noteId,
-						characterId: account?.characterId,
+						characterId: account?.character?.characterId,
 					}),
 				),
 			]);

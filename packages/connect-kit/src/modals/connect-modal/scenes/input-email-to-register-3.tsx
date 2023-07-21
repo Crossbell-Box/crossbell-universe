@@ -1,7 +1,7 @@
 import React from "react";
 import { LoadingOverlay } from "@mantine/core";
 import { CircleHelpIcon, useUrlComposer } from "@crossbell/ui";
-import { useAccountState } from "@crossbell/react-account";
+import { useCrossbellModel } from "@crossbell/react-account";
 
 import {
 	CheckIcon,
@@ -26,16 +26,16 @@ import styles from "./input-email-to-register-3.module.css";
 
 export function InputEmailToRegister3() {
 	const urlComposer = useUrlComposer();
+	const model = useCrossbellModel();
 	const store = useEmailRegisterStore();
 	const scene = useScenesStore();
 	const { hide: hideModal } = useConnectModal();
 
 	const register = React.useCallback(() => {
 		if (store.computed.canRegister) {
-			store.register().then((ok) => {
+			store.register(model).then((ok) => {
 				if (ok) {
-					const character =
-						useAccountState.getState().computed.account?.character;
+					const character = model.getCurrentAccount()?.character;
 
 					scene.goTo({
 						kind: SceneKind.congrats,
@@ -55,7 +55,7 @@ export function InputEmailToRegister3() {
 				}
 			});
 		}
-	}, [store, scene]);
+	}, [store, scene, model]);
 
 	return (
 		<>

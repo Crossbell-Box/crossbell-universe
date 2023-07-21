@@ -1,5 +1,5 @@
-import { useAccountState } from "./account-state";
+import { useCrossbellModelState } from "./crossbell-model";
 
 export function useIsSsrReady(): boolean {
-	return useAccountState((s) => s.ssrReady);
+	return useCrossbellModelState((s) => s.ssrReady, []);
 }

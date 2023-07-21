@@ -10,7 +10,10 @@ import {
 	LockIcon,
 } from "@crossbell/ui";
 import classNames from "classnames";
-import { useAccountCharacter, useAccountState } from "@crossbell/react-account";
+import {
+	useAccountCharacter,
+	useCrossbellModelState,
+} from "@crossbell/react-account";
 
 import {
 	SignInWithWallet,
@@ -36,7 +39,11 @@ import { VersionInfo } from "../../components/version-info";
 import { extractCharacterName } from "@crossbell/util-metadata";
 
 export default function MainSetting() {
-	const account = useAccountState();
+	const account = useCrossbellModelState(
+		({ wallet, email }) => ({ wallet, email }),
+		[],
+	);
+
 	const character = useAccountCharacter();
 	const characterId = character?.characterId;
 	const { goTo, updateLast } = useDynamicScenesModal();

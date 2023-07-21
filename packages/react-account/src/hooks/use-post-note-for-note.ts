@@ -4,7 +4,7 @@ import {
 	SCOPE_KEY_NOTE_STATUS,
 } from "@crossbell/indexer";
 
-import { putNote, siwePutNote } from "../apis";
+import { putNote, siwePutNote } from "@crossbell/store/apis";
 
 import { createAccountTypeBasedMutationHooks } from "./account-type-based-hooks";
 
@@ -40,10 +40,10 @@ export const usePostNoteForNote = createAccountTypeBasedMutationHooks<
 			supportOPSign: true,
 
 			async action({ metadata, note }, { account, siwe, contract }) {
-				if (account?.characterId) {
+				if (account?.character?.characterId) {
 					if (siwe) {
 						return siwePutNote({
-							characterId: account.characterId,
+							characterId: account.character.characterId,
 							siwe,
 							metadata,
 							linkItemType: "Note",
@@ -54,7 +54,7 @@ export const usePostNoteForNote = createAccountTypeBasedMutationHooks<
 						});
 					} else {
 						return contract.note.postForNote({
-							characterId: account.characterId,
+							characterId: account.character.characterId,
 							metadataOrUri: metadata,
 							targetCharacterId: note.characterId,
 							targetNoteId: note.noteId,

@@ -7,7 +7,7 @@ import {
 	SCOPE_KEY_CHARACTER_FOLLOW_STATS,
 } from "@crossbell/indexer";
 
-import { useAccountState } from "../account-state";
+import { useCrossbellModelState } from "../crossbell-model";
 
 import { useLinkCharacter, LinkCharacterOptions } from "./use-link-character";
 import {
@@ -21,8 +21,9 @@ import {
 
 export function useFollowCharacter(_options?: LinkCharacterOptions) {
 	const queryClient = useQueryClient();
-	const currentCharacterId = useAccountState(
-		(s) => s.computed.account?.characterId,
+	const currentCharacterId = useCrossbellModelState(
+		(_, m) => m.getCurrentCharacterId(),
+		[],
 	);
 
 	const options: LinkCharacterOptions = React.useMemo(
@@ -51,8 +52,9 @@ export function useFollowCharacter(_options?: LinkCharacterOptions) {
 
 export function useFollowCharacters(_options?: LinkCharactersOptions) {
 	const queryClient = useQueryClient();
-	const currentCharacterId = useAccountState(
-		(s) => s.computed.account?.characterId,
+	const currentCharacterId = useCrossbellModelState(
+		(_, m) => m.getCurrentCharacterId(),
+		[],
 	);
 
 	const options: LinkCharactersOptions = React.useMemo(
@@ -83,8 +85,9 @@ export function useFollowCharacters(_options?: LinkCharactersOptions) {
 
 export function useUnfollowCharacter(_options?: UnlinkCharacterOptions) {
 	const queryClient = useQueryClient();
-	const currentCharacterId = useAccountState(
-		(s) => s.computed.account?.characterId,
+	const currentCharacterId = useCrossbellModelState(
+		(_, m) => m.getCurrentCharacterId(),
+		[],
 	);
 
 	const options: UnlinkCharacterOptions = React.useMemo(

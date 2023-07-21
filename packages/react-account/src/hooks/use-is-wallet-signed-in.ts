@@ -1,5 +1,5 @@
-import { useAccountState } from "./account-state";
+import { useCrossbellModelState } from "./crossbell-model";
 
 export function useIsWalletSignedIn() {
-	return useAccountState((s) => !!s.wallet?.siwe);
+	return useCrossbellModelState((_, m) => m.getIsWalletSignedIn(), []);
 }

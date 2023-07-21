@@ -5,8 +5,8 @@ import {
 	SCOPE_KEY_NOTE_MINTS,
 } from "@crossbell/indexer";
 
-import { siweMintNote, getIsNoteMinted } from "../apis";
-import { asyncRetry } from "../utils";
+import { siweMintNote, getIsNoteMinted } from "@crossbell/store/apis";
+import { asyncRetry } from "@crossbell/store/utils";
 import { createAccountTypeBasedMutationHooks } from "./account-type-based-hooks";
 
 export const useMintNote = createAccountTypeBasedMutationHooks<

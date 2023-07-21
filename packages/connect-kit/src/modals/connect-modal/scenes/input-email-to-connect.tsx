@@ -16,6 +16,7 @@ import {
 	useEmailRegisterStore,
 } from "../stores";
 import styles from "./input-email-to-connect.module.css";
+import { useCrossbellModel } from "@crossbell/react-account";
 
 export function InputEmailToConnect() {
 	const goTo = useScenesStore(({ goTo }) => goTo);
@@ -23,6 +24,7 @@ export function InputEmailToConnect() {
 	const emailRegisterStore = useEmailRegisterStore();
 	const [visible, setVisible] = React.useState(false);
 	const tooltip = useTooltipState();
+	const model = useCrossbellModel();
 
 	return (
 		<>
@@ -94,7 +96,7 @@ export function InputEmailToConnect() {
 						}
 						onKeyDown={({ key }) => {
 							if (key === "Enter") {
-								emailConnectStore.connect();
+								emailConnectStore.connect(model);
 							}
 						}}
 						name="password"
@@ -124,7 +126,7 @@ export function InputEmailToConnect() {
 
 					<NextStepButton
 						disabled={!emailConnectStore.computed.isAbleToConnect}
-						onClick={emailConnectStore.connect}
+						onClick={() => emailConnectStore.connect(model)}
 					>
 						Connect
 					</NextStepButton>

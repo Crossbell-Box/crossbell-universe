@@ -61,9 +61,11 @@
 	"dependencies": {
 		"@crossbell/contract": "^1.5.13",
 		"@crossbell/indexer": "^1.5.13",
+		"@crossbell/store": "workspace:*",
 		"@crossbell/util-ethers": "^1.5.13",
 		"@crossbell/util-hooks": "^1.5.13",
 		"@crossbell/util-metadata": "^1.5.13",
+		"@orch/react": "^0.5.2",
 		"check-password-strength": "^2",
 		"crossbell": "^1.6.4",
 		"immer": "^10",

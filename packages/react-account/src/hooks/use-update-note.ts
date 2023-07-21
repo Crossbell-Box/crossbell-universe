@@ -7,7 +7,7 @@ import {
 } from "@crossbell/indexer";
 import { Draft, produce } from "immer";
 
-import { siweUpdateNote, updateNote } from "../apis";
+import { siweUpdateNote, updateNote } from "@crossbell/store/apis";
 
 import { createAccountTypeBasedMutationHooks } from "./account-type-based-hooks";
 
@@ -53,7 +53,9 @@ export const useUpdateNote = createAccountTypeBasedMutationHooks<
 	() => {
 		return {
 			async email(variables, { account }): Promise<Result> {
-				if (variables.note.characterId !== account.characterId) return null;
+				if (variables.note.characterId !== account.character.characterId) {
+					return null;
+				}
 
 				const metadata = await getMetadata(variables);
 
@@ -74,7 +76,10 @@ export const useUpdateNote = createAccountTypeBasedMutationHooks<
 
 					if (!metadata) return null;
 
-					if (siwe && variables.note.characterId === account.characterId) {
+					if (
+						siwe &&
+						variables.note.characterId === account.character?.characterId
+					) {
 						return siweUpdateNote({
 							siwe,
 							characterId: variables.note.characterId,
@@ -96,7 +101,9 @@ export const useUpdateNote = createAccountTypeBasedMutationHooks<
 			onSuccess({ queryClient, variables, account }) {
 				return Promise.all([
 					queryClient.invalidateQueries(
-						SCOPE_KEY_FOLLOWING_FEEDS_OF_CHARACTER(account?.characterId),
+						SCOPE_KEY_FOLLOWING_FEEDS_OF_CHARACTER(
+							account?.character?.characterId,
+						),
 					),
 
 					queryClient.invalidateQueries(

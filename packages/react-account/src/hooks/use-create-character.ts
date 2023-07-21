@@ -11,14 +11,15 @@ import {
 	SCOPE_KEY_PRIMARY_CHARACTER,
 } from "@crossbell/indexer";
 
-import { asyncRetry } from "../utils";
-import { useAccountState } from "./account-state";
+import { asyncRetry } from "@crossbell/store/utils";
+import { useCrossbellModel } from "./crossbell-model";
 
 // TODO: refactor this to use account-type-based-hooks
 export function useCreateCharacter() {
 	const address = useAddress();
 	const contract = useContract();
 	const queryClient = useQueryClient();
+	const account = useCrossbellModel();
 
 	return useMutation(
 		async ({
@@ -41,18 +42,15 @@ export function useCreateCharacter() {
 					queryClient.invalidateQueries(SCOPE_KEY_CHARACTERS(address)),
 					queryClient.invalidateQueries(SCOPE_KEY_PRIMARY_CHARACTER(address)),
 					queryClient.invalidateQueries(SCOPE_KEY_CHARACTER_BY_HANDLE(handle)),
-					useAccountState
-						.getState()
-						.refreshWallet()
-						.then(async () => {
-							const character = await asyncRetry(async (RETRY) => {
-								return (await indexer.character.getByHandle(handle)) || RETRY;
-							});
+					account.wallet.refresh().then(async () => {
+						const character = await asyncRetry(async (RETRY) => {
+							return (await indexer.character.getByHandle(handle)) || RETRY;
+						});
 
-							if (character) {
-								useAccountState.getState().switchCharacter(character);
-							}
-						}),
+						if (character) {
+							account.wallet.switchCharacter(character);
+						}
+					}),
 				]);
 			},
 			onError: (err: any) => {

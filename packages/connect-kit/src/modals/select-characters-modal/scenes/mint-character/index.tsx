@@ -1,7 +1,7 @@
 import React from "react";
 import { useRefCallback } from "@crossbell/util-hooks";
 import { useUrlComposer } from "@crossbell/ui";
-import { useAccountState } from "@crossbell/react-account";
+import { useCrossbellModel } from "@crossbell/react-account";
 
 import {
 	MintCharacter as Main,
@@ -19,6 +19,7 @@ export type MintCharacterProps = Omit<
 >;
 
 export function MintCharacter(props: MintCharacterProps) {
+	const model = useCrossbellModel();
 	const urlComposer = useUrlComposer();
 	const { hide: hideModal } = useSelectCharactersModal();
 	const [goTo, updateScene] = useScenesStore((s) => [s.goTo, s.updateLast]);
@@ -47,8 +48,7 @@ export function MintCharacter(props: MintCharacterProps) {
 			onSwitchFormMode={onSwitchFormMode}
 			onSwitchSceneMode={onSwitchSceneMode}
 			onSuccess={() => {
-				const character =
-					useAccountState.getState().computed.account?.character;
+				const character = model.getCurrentAccount()?.character;
 
 				goTo({
 					kind: SceneKind.congrats,

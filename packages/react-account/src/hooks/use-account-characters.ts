@@ -3,7 +3,7 @@ import { CharacterEntity } from "crossbell";
 
 import { useCharacters } from "@crossbell/indexer";
 
-import { useAccountState } from "./account-state";
+import { useConnectedAccount } from "./use-connected-account";
 
 export type UseAccountCharactersResult = {
 	isLoading: boolean;
@@ -16,7 +16,7 @@ export type UseAccountCharactersResult = {
 const noop = () => {};
 
 export function useAccountCharacters(): UseAccountCharactersResult {
-	const account = useAccountState((s) => s.computed.account);
+	const account = useConnectedAccount();
 	const { isLoading, data, hasNextPage, fetchNextPage, isFetchingNextPage } =
 		useCharacters(account?.address);
 	const characters = React.useMemo(

@@ -1,9 +1,8 @@
-import { waitUntilTransactionFinished } from "../apis";
-
-import { useAccountState } from "./account-state";
-import { createAccountTypeBasedMutationHooks } from "./account-type-based-hooks";
-import { SCOPE_KEY_ACCOUNT_BALANCE } from "./use-account-balance";
+import { waitUntilTransactionFinished } from "@crossbell/store/apis";
 import { type Address } from "viem";
+
+import { useCrossbellModel } from "./crossbell-model";
+import { createAccountTypeBasedMutationHooks } from "./account-type-based-hooks";
 
 export type UseTransferCSBParams = {
 	toAddress: Address;
@@ -16,23 +15,24 @@ export const useTransferCsb = createAccountTypeBasedMutationHooks<
 	void,
 	UseTransferCSBParams,
 	Result
->({ actionDesc: "transfer CSB", withParams: false }, () => ({
-	wallet: {
-		supportOPSign: false,
+>({ actionDesc: "transfer CSB", withParams: false }, () => {
+	const model = useCrossbellModel();
 
-		async action({ toAddress, amount }, { contract }) {
-			const result = await contract.csb.transfer({ toAddress, amount });
+	return {
+		wallet: {
+			supportOPSign: false,
 
-			await waitUntilTransactionFinished(result.transactionHash);
+			async action({ toAddress, amount }, { contract }) {
+				const result = await contract.csb.transfer({ toAddress, amount });
 
-			return result;
+				await waitUntilTransactionFinished(result.transactionHash);
+
+				return result;
+			},
 		},
-	},
 
-	onSuccess({ queryClient, account }) {
-		return Promise.all([
-			useAccountState.getState().refresh(),
-			queryClient.invalidateQueries(SCOPE_KEY_ACCOUNT_BALANCE(account)),
-		]);
-	},
-}));
+		onSuccess() {
+			return Promise.all([model.refresh()]);
+		},
+	};
+});

@@ -1,7 +1,7 @@
 import { NoteLinkType } from "@crossbell/indexer";
 import { MarkOptional } from "ts-essentials";
 
-import { useAccountState } from "../account-state";
+import { useCrossbellModelState } from "../crossbell-model";
 import { useAccountCharacterId } from "../use-account-character-id";
 import { useIsNoteLinked, UseIsNoteLinkedParams } from "./use-is-note-linked";
 import {
@@ -17,7 +17,7 @@ import { useNoteLinkList, UseNoteLinkListParams } from "./use-note-link-list";
 export function useIsNoteLiked(
 	params: Omit<UseIsNoteLinkedParams, "linkType">,
 ) {
-	const { characterId } = useAccountCharacterId();
+	const characterId = useAccountCharacterId();
 
 	const result = useIsNoteLinked({
 		linkType: NoteLinkType.like,
@@ -37,7 +37,7 @@ export function useIsNoteLiked(
 export function useNoteLikeCount(
 	params: MarkOptional<Omit<UseNoteLinkCountParams, "linkType">, "characterId">,
 ) {
-	const { characterId } = useAccountCharacterId();
+	const characterId = useAccountCharacterId();
 
 	return useNoteLinkCount({
 		linkType: NoteLinkType.like,
@@ -47,9 +47,10 @@ export function useNoteLikeCount(
 }
 
 export function useToggleLikeNote(options?: UseToggleLinkNoteOptions) {
-	const needInvokeContract = useAccountState(
-		(s) => !s.email && !s.wallet?.siwe,
-	);
+	const needInvokeContract = useCrossbellModelState((_, m) => {
+		const account = m.getCurrentAccount();
+		return account?.type === "wallet" && !account.siwe;
+	}, []);
 	const mutation = useToggleLinkNote(NoteLinkType.like, options);
 
 	return {

@@ -1,7 +1,7 @@
 import { Contract, Indexer } from "crossbell";
 import { useQueryClient } from "@tanstack/react-query";
 
-import { EmailAccount, GeneralAccount, WalletAccount } from "../account-state";
+import { EmailAccount, WalletAccount, SiweInfo } from "@crossbell/store";
 
 export type Context<T> = {
 	contract: Contract;
@@ -25,7 +25,7 @@ export type AccountTypeBasedHooksFactory<Params, Variables, Data> = (
 					v: Variables,
 					context: Context<{
 						account: Omit<WalletAccount, "siwe">;
-						siwe: WalletAccount["siwe"];
+						siwe: SiweInfo | null;
 					}>,
 				) => Promise<Data>;
 		  }
@@ -40,7 +40,7 @@ export type AccountTypeBasedHooksFactory<Params, Variables, Data> = (
 	onSuccess?: (params: {
 		data: Data | null;
 		variables: Variables;
-		account: GeneralAccount | null;
+		account: EmailAccount | WalletAccount | null;
 		queryClient: ReturnType<typeof useQueryClient>;
 	}) => Promise<unknown>;
 
@@ -48,7 +48,7 @@ export type AccountTypeBasedHooksFactory<Params, Variables, Data> = (
 		data: Data | null | undefined;
 		error: unknown;
 		variables: Variables;
-		account: GeneralAccount | null;
+		account: EmailAccount | WalletAccount | null;
 		queryClient: ReturnType<typeof useQueryClient>;
 	}) => Promise<unknown>;
 };

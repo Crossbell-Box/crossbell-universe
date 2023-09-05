@@ -9,7 +9,7 @@ export type ContractCheckerDelegate = {
 	openFaucetHintModel: () => void;
 	openMintNewCharacterModel: () => void;
 	openConnectModal: () => void;
-	showSwitchNetworkModal: (contract: Contract) => Promise<void>;
+	openSwitchNetworkModal: (contract: Contract) => Promise<void>;
 };
 
 export type InjectContractCheckerOptions = {
@@ -28,7 +28,7 @@ export function injectContractChecker(
 ) {
 	return handleActions(contract, async ({ action, path }) => {
 		if (needValidate(path)) {
-			await checkNetwork(contract, delegate.showSwitchNetworkModal);
+			await checkNetwork(contract, delegate.openSwitchNetworkModal);
 
 			const address = getCurrentAddress();
 
@@ -90,7 +90,7 @@ function hasEnoughCsb(amount: Numberish) {
 
 async function checkNetwork(
 	contract: Contract<true>,
-	showModal: ContractCheckerDelegate["showSwitchNetworkModal"],
+	showModal: ContractCheckerDelegate["openSwitchNetworkModal"],
 ) {
 	const isMainnet = await isCrossbellMainnet(contract.walletClient);
 

@@ -118,7 +118,7 @@ export function ConnectKitProvider({
 					openConnectModal={showConnectModal}
 					openFaucetHintModel={() => showNoEnoughCSBModal("claim-csb")}
 					openMintNewCharacterModel={showWalletMintNewCharacterModal}
-					showSwitchNetworkModal={showSwitchNetworkModal}
+					openSwitchNetworkModal={showSwitchNetworkModal}
 					showClaimCSBTipsModal={showClaimCSBTipsModal}
 					showErrorMsg={(err) =>
 						showNotification({ color: "red", message: `${err}` })

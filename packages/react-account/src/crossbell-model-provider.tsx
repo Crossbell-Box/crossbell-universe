@@ -25,7 +25,7 @@ export const CrossbellModelProvider = ({
 		props.openMintNewCharacterModel,
 	);
 	const openConnectModal = useRefCallback(props.openConnectModal);
-	const showSwitchNetworkModal = useRefCallback(props.showSwitchNetworkModal);
+	const openSwitchNetworkModal = useRefCallback(props.openSwitchNetworkModal);
 	const showClaimCSBTipsModal = useRefCallback(props.showClaimCSBTipsModal);
 	const showErrorMsg = useRefCallback(props.showErrorMsg);
 	const getIndexer = useRefCallback(props.getIndexer);
@@ -35,7 +35,7 @@ export const CrossbellModelProvider = ({
 			openFaucetHintModel,
 			openMintNewCharacterModel,
 			openConnectModal,
-			showSwitchNetworkModal,
+			openSwitchNetworkModal,
 			showClaimCSBTipsModal,
 			showErrorMsg,
 			getIndexer,
@@ -44,7 +44,7 @@ export const CrossbellModelProvider = ({
 			openFaucetHintModel,
 			openMintNewCharacterModel,
 			openConnectModal,
-			showSwitchNetworkModal,
+			openSwitchNetworkModal,
 			showClaimCSBTipsModal,
 			showErrorMsg,
 			getIndexer,

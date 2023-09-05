@@ -33,11 +33,30 @@ function restore<S>(model: OrchModel<S>, { storage, key }: PersistConfig) {
 }
 
 function autoSave<S>(model: OrchModel<S>, { storage, key }: PersistConfig) {
-	model.on.change((value) => storage?.setItem(key, JSON.stringify(value)));
+	model.on.change((value) => storage?.setItem(key, stringify(value)));
 }
 
 function parse<T>(str: string | null): T | null {
 	if (!str) return null;
 
-	return JSON.parse(str);
+	return JSON.parse(str, (_, value) => {
+		if (value && value.__type === "bigint") {
+			return BigInt(value.value);
+		} else {
+			return value;
+		}
+	});
+}
+
+function stringify(data: any) {
+	return JSON.stringify(data, (_, value) => {
+		if (typeof value === "bigint") {
+			return {
+				__type: "bigint",
+				value: value.toString(),
+			};
+		} else {
+			return value;
+		}
+	});
 }

@@ -18,14 +18,14 @@ export type WalletAccount = {
 
 export type WalletState = SiweState & { wallet: WalletAccount | null };
 
-export type WalletActionsParams = {
-	indexer: Indexer;
-	contract: Contract;
+export type WalletActionsDelegate = {
+	getIndexer: () => Indexer;
+	getContract: () => Contract;
 };
 
 export function walletActions<T extends WalletState>(
 	model: OrchModel<T>,
-	{ contract }: WalletActionsParams,
+	delegate: WalletActionsDelegate,
 ) {
 	const siwe = siweActions(model);
 
@@ -60,7 +60,7 @@ export function walletActions<T extends WalletState>(
 			update(
 				address,
 				...(await Promise.all([
-					getAddressBalance(address, contract),
+					getAddressBalance(address, delegate.getContract()),
 
 					getDefaultCharacter({
 						address,

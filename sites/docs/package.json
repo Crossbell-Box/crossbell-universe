@@ -11,7 +11,6 @@
 	},
 	"dependencies": {
 		"@crossbell/connect-kit": "^1.5.14",
-		"@crossbell/contract": "^1.5.13",
 		"@crossbell/indexer": "^1.5.13",
 		"@crossbell/notification": "^1.5.13",
 		"@crossbell/ui": "^1.5.13",

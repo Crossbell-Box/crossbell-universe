@@ -1,7 +1,7 @@
 import React from "react";
 import { useRefCallback } from "@crossbell/util-hooks";
 import { EMPTY, filter, from, map, Subject, switchMap } from "rxjs";
-import { useAddress } from "@crossbell/contract";
+import { useAccount } from "wagmi";
 
 import { useCrossbellModel } from "./crossbell-model";
 import { useAccountCharacter } from "./use-account-character";
@@ -128,7 +128,7 @@ function useCheckIsConnected({
 	mustHaveCharacter: boolean;
 }) {
 	const account = useCrossbellModel();
-	const isWalletConnected = !!useAddress();
+	const isWalletConnected = !!useAccount().address;
 	const character = useAccountCharacter();
 	const isOpSignEnabled = useIsOpSignEnabled(character);
 

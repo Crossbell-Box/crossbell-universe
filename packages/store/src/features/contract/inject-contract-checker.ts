@@ -1,33 +1,34 @@
 import { Contract, Numberish } from "crossbell";
 import { isCrossbellMainnet } from "crossbell/network";
-import { parseEther } from "viem";
-import { handleActions } from "@crossbell/util-hooks";
-import { type Address } from "viem";
+import { parseEther, type Address } from "viem";
 
+import { handleActions } from "../../utils";
 import { BizError, ERROR_CODES } from "./errors";
 
-export type InjectContractCheckerConfig = {
-	contract: Contract;
-	getCurrentCharacterId: () => number | null;
-	getCurrentAddress: () => Address | null;
+export type ContractCheckerDelegate = {
 	openFaucetHintModel: () => void;
 	openMintNewCharacterModel: () => void;
 	openConnectModal: () => void;
-	showSwitchNetworkModal?: (contract: Contract) => Promise<void>;
+	showSwitchNetworkModal: (contract: Contract) => Promise<void>;
 };
 
-export function injectContractChecker({
-	contract,
-	getCurrentCharacterId,
-	getCurrentAddress,
-	openConnectModal,
-	openFaucetHintModel,
-	openMintNewCharacterModel,
-	showSwitchNetworkModal,
-}: InjectContractCheckerConfig) {
+export type InjectContractCheckerOptions = {
+	getCurrentCharacterId: () => number | null;
+	getCurrentAddress: () => Address | null;
+	delegate: ContractCheckerDelegate;
+};
+
+export function injectContractChecker(
+	contract: Contract,
+	{
+		getCurrentCharacterId,
+		getCurrentAddress,
+		delegate,
+	}: InjectContractCheckerOptions,
+) {
 	return handleActions(contract, async ({ action, path }) => {
 		if (needValidate(path)) {
-			await checkNetwork(contract, showSwitchNetworkModal);
+			await checkNetwork(contract, delegate.showSwitchNetworkModal);
 
 			const address = getCurrentAddress();
 
@@ -38,12 +39,12 @@ export function injectContractChecker({
 				});
 
 				if (!hasEnoughCsb(balance)) {
-					openFaucetHintModel();
+					delegate.openFaucetHintModel();
 					throw new BizError("Not enough $CSB.", ERROR_CODES.NO_CHARACTER);
 				}
 			} else {
 				// user is not logged in
-				openConnectModal?.();
+				delegate.openConnectModal?.();
 				throw new BizError(
 					"Not connected. Please connect your wallet.",
 					ERROR_CODES.NOT_CONNECTED,
@@ -52,7 +53,7 @@ export function injectContractChecker({
 
 			// check if the wallet has any character
 			if (needCheckCharacter(path) && !getCurrentCharacterId()) {
-				openMintNewCharacterModel();
+				delegate.openMintNewCharacterModel();
 				throw new BizError(
 					"You don't have a character yet",
 					ERROR_CODES.NO_CHARACTER,
@@ -89,7 +90,7 @@ function hasEnoughCsb(amount: Numberish) {
 
 async function checkNetwork(
 	contract: Contract<true>,
-	showModal: InjectContractCheckerConfig["showSwitchNetworkModal"],
+	showModal: ContractCheckerDelegate["showSwitchNetworkModal"],
 ) {
 	const isMainnet = await isCrossbellMainnet(contract.walletClient);
 

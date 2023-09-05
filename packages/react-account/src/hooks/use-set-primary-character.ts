@@ -4,12 +4,14 @@ import {
 	useQueryClient,
 } from "@tanstack/react-query";
 import { showNotification } from "@mantine/notifications";
+import { useAccount } from "wagmi";
 
-import { useContract, useAddress } from "@crossbell/contract";
 import {
 	SCOPE_KEY_CHARACTERS,
 	SCOPE_KEY_PRIMARY_CHARACTER,
 } from "@crossbell/indexer";
+
+import { useContract } from "./use-contract";
 
 type UpdateFnParams = { characterId: number };
 
@@ -23,7 +25,7 @@ export type UseSetPrimaryCharacterOptions = UseMutationOptions<
 export function useSetPrimaryCharacter(
 	options?: UseSetPrimaryCharacterOptions,
 ) {
-	const address = useAddress();
+	const { address } = useAccount();
 
 	const contract = useContract();
 	const queryClient = useQueryClient();

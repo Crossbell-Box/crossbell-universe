@@ -7,23 +7,46 @@ import {
 	EmailActionsDelegate,
 	EmailState,
 } from "./features/email";
-import { walletActions, WalletState, WalletAccount } from "./features/wallet";
+import {
+	walletActions,
+	WalletState,
+	WalletAccount,
+	WalletActionsDelegate,
+} from "./features/wallet";
 import { markSSRReady, SSRReadyState } from "./features/ssr-ready";
+import { contractActions, ContractDelegate } from "./features/contract";
 import { persist } from "./features/persist";
 
-export type CrossbellModelDelegate = EmailActionsDelegate;
+export type CrossbellModelDelegate = EmailActionsDelegate &
+	Omit<WalletActionsDelegate, "getContract"> &
+	ContractDelegate;
 
 export type CrossbellModelState = SSRReadyState & WalletState & EmailState;
 
 export class CrossbellModel extends OrchModel<CrossbellModelState> {
 	readonly email: ReturnType<typeof emailActions>;
 	readonly wallet: ReturnType<typeof walletActions>;
+	readonly contract: ReturnType<typeof contractActions>;
 
 	constructor(delegate: CrossbellModelDelegate, storage: StateStorage | null) {
 		super({ ssrReady: false, wallet: null, email: null, _siwe: {} });
 
 		this.email = emailActions(this, delegate);
-		this.wallet = walletActions(this);
+
+		this.wallet = walletActions(this, {
+			getIndexer: delegate.getIndexer,
+			getContract: () => this.contract.get(),
+		});
+
+		this.contract = contractActions({
+			getCurrentAddress: () => {
+				return this.getState().wallet?.address ?? null;
+			},
+			getCurrentCharacterId: () => {
+				return this.getState().wallet?.character?.characterId ?? null;
+			},
+			delegate,
+		});
 
 		markSSRReady(this);
 		persist(this, { key: "crossbell:store", storage });

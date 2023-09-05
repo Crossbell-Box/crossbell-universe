@@ -4,9 +4,9 @@ import {
 	UseMutationResult,
 	UseMutationOptions,
 } from "@tanstack/react-query";
-import { useContract } from "@crossbell/contract";
 import { indexer } from "@crossbell/indexer";
 
+import { useContract } from "../use-contract";
 import { useCrossbellModelState } from "../crossbell-model";
 import { useHandleError } from "../use-handle-error";
 import { useOPSignOperatorHasPermissions } from "../operator-sign";

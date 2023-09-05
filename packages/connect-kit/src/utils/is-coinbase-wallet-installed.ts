@@ -18,5 +18,5 @@ export function isCoinbaseBrowser(): boolean {
 
 	const { ethereum } = window;
 
-	return !!ethereum?.isCoinbaseBrowser;
+	return !!(ethereum as any)?.isCoinbaseBrowser;
 }

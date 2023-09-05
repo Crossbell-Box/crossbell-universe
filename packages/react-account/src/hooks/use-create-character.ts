@@ -1,8 +1,7 @@
 import { CharacterMetadata } from "crossbell";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { showNotification } from "@mantine/notifications";
-
-import { useContract, useAddress } from "@crossbell/contract";
+import { useAccount } from "wagmi";
 import { indexer } from "@crossbell/indexer";
 import {
 	SCOPE_KEY_CHARACTER,
@@ -13,10 +12,11 @@ import {
 
 import { asyncRetry } from "@crossbell/store/utils";
 import { useCrossbellModel } from "./crossbell-model";
+import { useContract } from "./use-contract";
 
 // TODO: refactor this to use account-type-based-hooks
 export function useCreateCharacter() {
-	const address = useAddress();
+	const { address } = useAccount();
 	const contract = useContract();
 	const queryClient = useQueryClient();
 	const account = useCrossbellModel();

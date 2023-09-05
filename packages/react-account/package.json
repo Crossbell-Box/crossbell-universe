@@ -59,7 +59,6 @@
 		"./package.json": "./package.json"
 	},
 	"dependencies": {
-		"@crossbell/contract": "^1.5.13",
 		"@crossbell/indexer": "^1.5.13",
 		"@crossbell/store": "workspace:*",
 		"@crossbell/util-ethers": "^1.5.13",

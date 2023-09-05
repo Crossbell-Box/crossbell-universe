@@ -1,20 +1,20 @@
 import React from "react";
 import { useRefCallback } from "@crossbell/util-hooks";
-import type { Address, Hex } from "viem";
 
-import { StoreProvider } from "./store";
-import { StateStorage } from "@crossbell/store";
-
-export type BaseSigner = {
-	signMessage: (msg: string) => Promise<Hex | undefined>;
-	getAddress: () => Promise<Address | undefined>;
-};
+import type {
+	StateStorage,
+	ContractProvider,
+	BaseSigner,
+} from "@crossbell/store";
+import {
+	CrossbellModelProvider,
+	CrossbellModelProviderProps,
+} from "./crossbell-model-provider";
 
 export type ReactAccountContext = {
 	disableOPSign?: boolean;
 	onDisconnect: () => void;
 	getSigner: () => Promise<BaseSigner | undefined>;
-	getStorage: () => StateStorage | null;
 };
 
 const Context = React.createContext<ReactAccountContext>({
@@ -25,27 +25,34 @@ const Context = React.createContext<ReactAccountContext>({
 	getSigner() {
 		throw new Error("getSigner not implemented");
 	},
-
-	getStorage() {
-		throw new Error("getStorage not implemented");
-	},
 });
 
-export function ReactAccountProvider(
-	props: ReactAccountContext & { children: React.ReactNode },
-) {
+export type ReactAccountProviderProps = {
+	children: React.ReactNode;
+	provider: ContractProvider | null;
+	getStorage: () => StateStorage | null;
+} & ReactAccountContext &
+	CrossbellModelProviderProps;
+
+export function ReactAccountProvider(props: ReactAccountProviderProps) {
 	const { disableOPSign = false } = props;
 	const onDisconnect = useRefCallback(props.onDisconnect);
 	const getSigner = useRefCallback(props.getSigner);
-	const getStorage = useRefCallback(props.getStorage);
+
 	const value = React.useMemo(
-		() => ({ onDisconnect, getSigner, disableOPSign, getStorage }),
+		() => ({
+			onDisconnect,
+			getSigner,
+			disableOPSign,
+		}),
 		[onDisconnect, getSigner, disableOPSign],
 	);
 
 	return (
 		<Context.Provider value={value}>
-			<StoreProvider getStorage={getStorage}>{props.children}</StoreProvider>
+			<CrossbellModelProvider {...props}>
+				{props.children}
+			</CrossbellModelProvider>
 		</Context.Provider>
 	);
 }

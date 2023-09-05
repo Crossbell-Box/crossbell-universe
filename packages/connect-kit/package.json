@@ -32,7 +32,6 @@
 		"./index.css": "./dist/index.css"
 	},
 	"dependencies": {
-		"@crossbell/contract": "^1.5.13",
 		"@crossbell/indexer": "^1.5.13",
 		"@crossbell/react-account": "^1.5.13",
 		"@crossbell/ui": "^1.5.13",

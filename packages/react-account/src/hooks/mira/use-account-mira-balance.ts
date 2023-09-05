@@ -1,5 +1,4 @@
 import { useQuery } from "@tanstack/react-query";
-import { useContract } from "@crossbell/contract";
 import { type Address } from "viem";
 import { type Numberish } from "crossbell";
 
@@ -7,6 +6,7 @@ import {
 	getAddressMiraBalance,
 	getCharacterMiraBalance,
 } from "@crossbell/store/apis";
+import { useContract } from "../use-contract";
 import { useConnectedAccount } from "../use-connected-account";
 import type { AccountBalance } from "@crossbell/store";
 

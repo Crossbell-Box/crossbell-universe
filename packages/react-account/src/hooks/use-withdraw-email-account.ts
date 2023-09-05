@@ -1,11 +1,11 @@
 import { useMutation, UseMutationOptions } from "@tanstack/react-query";
-import { useContract } from "@crossbell/contract";
 import { indexer } from "@crossbell/indexer";
 import { isAddressEqual } from "viem";
 
 import { getWithdrawProof } from "@crossbell/store/apis";
 import { asyncRetry } from "@crossbell/store/utils";
 import { useCrossbellModel } from "./crossbell-model";
+import { useContract } from "./use-contract";
 
 export function useWithdrawEmailAccount(options?: UseMutationOptions) {
 	const account = useCrossbellModel();

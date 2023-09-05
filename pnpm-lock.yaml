@@ -276,9 +276,6 @@ importers:
 
   packages/connect-kit:
     dependencies:
-      '@crossbell/contract':
-        specifier: ^1.5.13
-        version: link:../contract
       '@crossbell/indexer':
         specifier: ^1.5.13
         version: link:../indexer
@@ -383,21 +380,6 @@ importers:
         specifier: 2.1.5
         version: 2.1.5
 
-  packages/contract:
-    dependencies:
-      '@crossbell/util-hooks':
-        specifier: ^1.5.13
-        version: link:../util-hooks
-      crossbell:
-        specifier: ^1.6.4
-        version: 1.6.4(typescript@5.2.2)
-      react:
-        specifier: ^18
-        version: 18.2.0
-      viem:
-        specifier: ^1.10.1
-        version: 1.10.1(typescript@5.2.2)
-
   packages/indexer:
     dependencies:
       '@tanstack/react-query':
@@ -467,9 +449,6 @@ importers:
 
   packages/react-account:
     dependencies:
-      '@crossbell/contract':
-        specifier: ^1.5.13
-        version: link:../contract
       '@crossbell/indexer':
         specifier: ^1.5.13
         version: link:../indexer
@@ -525,9 +504,6 @@ importers:
 
   packages/store:
     dependencies:
-      '@crossbell/contract':
-        specifier: ^1.5.13
-        version: link:../contract
       '@crossbell/indexer':
         specifier: ^1.5.13
         version: link:../indexer
@@ -627,9 +603,6 @@ importers:
       '@crossbell/connect-kit':
         specifier: ^1.5.14
         version: link:../../packages/connect-kit
-      '@crossbell/contract':
-        specifier: ^1.5.13
-        version: link:../../packages/contract
       '@crossbell/indexer':
         specifier: ^1.5.13
         version: link:../../packages/indexer

@@ -10,7 +10,6 @@ import type { WalletConnectConnector } from "wagmi/connectors/walletConnect";
 import type { OKXConnector } from "../connectors";
 import { metaMaskWallet } from "./meta-mask-wallet";
 import { coinbaseWallet } from "./coinbase-wallet";
-import { braveWallet } from "./brave-wallet";
 import { okxWallet } from "./okx-wallet";
 import { browserWallet } from "./browser-wallet";
 
@@ -43,7 +42,6 @@ export function useWalletConnectors() {
 				okxWallet(connectorMap.okx),
 				metaMaskWallet(connectorMap.metaMask, connectorMap.walletConnect),
 				coinbaseWallet(connectorMap.coinbaseWallet),
-				braveWallet(connectorMap.injected),
 				browserWallet(connectorMap.injected),
 			]),
 		[connectors],

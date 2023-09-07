@@ -1,6 +1,6 @@
 {
 	"name": "docs",
-	"version": "1.5.13",
+	"version": "1.5.14",
 	"private": true,
 	"scripts": {
 		"build": "next build",
@@ -10,7 +10,7 @@
 		"start": "next start"
 	},
 	"dependencies": {
-		"@crossbell/connect-kit": "^1.5.13",
+		"@crossbell/connect-kit": "^1.5.14",
 		"@crossbell/contract": "^1.5.13",
 		"@crossbell/indexer": "^1.5.13",
 		"@crossbell/notification": "^1.5.13",

@@ -12,6 +12,7 @@ import { metaMaskWallet } from "./meta-mask-wallet";
 import { coinbaseWallet } from "./coinbase-wallet";
 import { braveWallet } from "./brave-wallet";
 import { okxWallet } from "./okx-wallet";
+import { browserWallet } from "./browser-wallet";
 
 enum KnownConnector {
 	metaMask = "metaMask",
@@ -43,6 +44,7 @@ export function useWalletConnectors() {
 				metaMaskWallet(connectorMap.metaMask, connectorMap.walletConnect),
 				coinbaseWallet(connectorMap.coinbaseWallet),
 				braveWallet(connectorMap.injected),
+				browserWallet(connectorMap.injected),
 			]),
 		[connectors],
 	);

@@ -1,4 +1,5 @@
-import { Address, Hex } from "viem";
+import type { Address, Hex } from "viem";
+import type { CharacterEntity } from "crossbell";
 
 export type BaseSigner = {
 	signMessage: (msg: string) => Promise<Hex | undefined>;
@@ -17,3 +18,10 @@ export type AccountBalance = {
 	symbol: string;
 	value: bigint;
 };
+
+export interface BaseAccount<T extends string> {
+	type: T;
+	character: CharacterEntity | null;
+	balance: AccountBalance;
+	mira: AccountBalance;
+}

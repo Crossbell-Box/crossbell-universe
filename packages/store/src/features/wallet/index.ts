@@ -4,17 +4,15 @@ import type { Address } from "viem";
 
 import { indexer } from "@crossbell/indexer";
 
-import { AccountBalance, BaseSigner } from "../../types";
+import { getAddressMiraBalance } from "../../apis";
+import { BaseAccount, BaseSigner } from "../../types";
 import { csbToBalance } from "../../utils";
 import { SiweState, siweActions, SiweInfo } from "./siwe";
 
-export type WalletAccount = {
-	type: "wallet";
-	character: CharacterEntity | null;
-	balance: AccountBalance;
+export interface WalletAccount extends BaseAccount<"wallet"> {
 	address: Address;
 	siwe: SiweInfo | null;
-};
+}
 
 export type WalletState = SiweState & { wallet: WalletAccount | null };
 
@@ -27,7 +25,7 @@ export function walletActions<T extends WalletState>(
 	model: OrchModel<T>,
 	delegate: WalletActionsDelegate,
 ) {
-	const siwe = siweActions(model);
+	const siwe_ = siweActions(model);
 
 	const disconnect = mutation(model, (state) => {
 		state.wallet = null;
@@ -36,40 +34,34 @@ export function walletActions<T extends WalletState>(
 	const connect = (() => {
 		const update = mutation(
 			model,
-			(
-				state,
-				address: Address,
-				balance: AccountBalance,
-				character: CharacterEntity | null,
-				siwe: SiweInfo | null,
-			) => {
-				state.wallet = {
-					address,
-					character,
-					type: "wallet",
-					siwe: siwe,
-					balance,
-				};
+			(state, account: Omit<WalletAccount, "type">) => {
+				state.wallet = { type: "wallet", ...account };
 			},
 		);
 
 		return async (address: Address) => {
 			const { wallet } = model.getState();
 			const isSameAddress = wallet?.address === address;
+			const [mira, balance, character, siwe] = await Promise.all([
+				getAddressMiraBalance({
+					address,
+					contract: delegate.getContract(),
+				}),
 
-			update(
-				address,
-				...(await Promise.all([
-					getAddressBalance(address, delegate.getContract()),
+				getAddressBalance({
+					address,
+					contract: delegate.getContract(),
+				}),
 
-					getDefaultCharacter({
-						address,
-						characterId: isSameAddress ? wallet.character?.characterId : null,
-					}),
+				getDefaultCharacter({
+					address,
+					characterId: isSameAddress ? wallet.character?.characterId : null,
+				}),
 
-					siwe.refresh(address),
-				])),
-			);
+				siwe_.refresh(address),
+			]);
+
+			update({ address, balance, character, siwe, mira });
 		};
 	})();
 
@@ -98,7 +90,7 @@ export function walletActions<T extends WalletState>(
 		});
 
 		return async (signer: BaseSigner) => {
-			update(await siwe.signIn(signer));
+			update(await siwe_.signIn(signer));
 		};
 	})();
 
@@ -121,7 +113,13 @@ async function getDefaultCharacter({
 	);
 }
 
-async function getAddressBalance(address: Address, contract: Contract) {
+async function getAddressBalance({
+	address,
+	contract,
+}: {
+	address: Address;
+	contract: Contract;
+}) {
 	return contract.csb
 		.getBalance({ owner: address })
 		.then(({ data }) => csbToBalance(data));

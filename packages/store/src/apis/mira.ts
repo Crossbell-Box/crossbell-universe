@@ -2,6 +2,8 @@ import { indexer } from "@crossbell/indexer";
 import type { Contract, Numberish } from "crossbell";
 import { type Address, formatUnits } from "viem";
 
+import { AccountBalance } from "../types";
+
 export async function getMiraTokenDecimals(
 	contract: Contract,
 ): Promise<number> {
@@ -63,7 +65,7 @@ export async function getAddressMiraBalance({
 }: {
 	address: Address;
 	contract: Contract;
-}) {
+}): Promise<AccountBalance> {
 	const { data: value } = await contract.tips.getBalance({ address });
 	const decimals = await getMiraTokenDecimals(contract);
 

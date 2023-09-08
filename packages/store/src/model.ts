@@ -17,7 +17,7 @@ import { markSSRReady, SSRReadyState } from "./features/ssr-ready";
 import { contractActions, ContractDelegate } from "./features/contract";
 import { persist } from "./features/persist";
 
-export type CrossbellModelDelegate = EmailActionsDelegate &
+export type CrossbellModelDelegate = Omit<EmailActionsDelegate, "getContract"> &
 	Omit<WalletActionsDelegate, "getContract"> &
 	ContractDelegate;
 

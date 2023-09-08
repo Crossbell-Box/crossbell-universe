@@ -1,21 +1,24 @@
 import { indexer } from "@crossbell/indexer";
 import { OrchModel, mutation } from "@orch/core";
-import { CharacterEntity } from "crossbell";
+import { CharacterEntity, Contract } from "crossbell";
 import { parseEther } from "viem";
 
-import { fetchAccountInfo, refillBalance as doRefillBalance } from "../../apis";
+import {
+	fetchAccountInfo,
+	getCharacterMiraBalance,
+	refillBalance as doRefillBalance,
+} from "../../apis";
 import type { AccountBalance } from "../../types";
 import { csbToBalance } from "../../utils";
+import { BaseAccount } from "../../types";
 
-export type EmailAccount = {
-	type: "email";
+export interface EmailAccount extends BaseAccount<"email"> {
 	character: CharacterEntity;
 	address: undefined;
 	token: string;
 	email: string;
-	balance: AccountBalance;
 	lastCSBRefillTimestamp: number | null;
-};
+}
 
 export type EmailState = { email: EmailAccount | null };
 
@@ -41,6 +44,7 @@ const RefillEmailBalanceStatusMsg: Record<
 export type EmailActionsDelegate = {
 	showClaimCSBTipsModal: (msg: string) => void;
 	showErrorMsg: (msg: string) => void;
+	getContract: () => Contract;
 };
 
 export function emailActions<T extends EmailState>(
@@ -62,42 +66,41 @@ export function emailActions<T extends EmailState>(
 			model,
 			(
 				state,
-				data: {
-					token: string;
-					email: string;
-					character: CharacterEntity;
-					csb: string;
-				},
+				account: Omit<
+					EmailAccount,
+					"type" | "address" | "lastCSBRefillTimestamp"
+				>,
 			) => {
 				state.email = {
 					type: "email",
-					token: data.token,
 					address: undefined,
-					email: data.email,
-					character: data.character,
-					balance: csbToBalance(data.csb),
 					lastCSBRefillTimestamp: null,
+					...account,
 				};
 			},
 		);
 
-		const result = await fetchAccountInfo(token);
+		const info = await fetchAccountInfo(token);
 
-		if (!result.ok) {
-			return error(`FetchAccountInfoError: ${result.msg}`);
+		if (!info.ok) {
+			return error(`FetchAccountInfoError: ${info.msg}`);
 		}
 
-		const character = await indexer.character.get(result.characterId);
+		const character = await indexer.character.get(info.characterId);
 
 		if (!character) {
-			return error(`No character for ${result.characterId}`);
+			return error(`No character for ${info.characterId}`);
 		}
 
 		onSuccess({
 			token,
 			character,
-			csb: result.csb,
-			email: result.email,
+			balance: csbToBalance(info.csb),
+			email: info.email,
+			mira: await getCharacterMiraBalance({
+				contract: delegate.getContract(),
+				characterId: character.characterId,
+			}),
 		});
 	};
 

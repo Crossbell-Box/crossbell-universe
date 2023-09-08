@@ -1,7 +1,7 @@
 import React from "react";
 import { useSwitchNetwork } from "wagmi";
 import { CrossbellChainLogo, LoadingOverlay } from "@crossbell/ui";
-import { crossbell } from "wagmi/chains";
+import { crossbell } from "@wagmi/chains";
 import classNames from "classnames";
 
 import {

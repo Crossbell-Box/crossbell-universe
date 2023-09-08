@@ -1,6 +1,6 @@
 import type { WindowProvider } from "wagmi/window";
 import { InjectedConnector } from "wagmi/connectors/injected";
-import { Chain } from "wagmi/chains";
+import { Chain } from "@wagmi/chains";
 
 const delay = (timeout: number) =>
 	new Promise((resolve) => setTimeout(resolve, timeout));

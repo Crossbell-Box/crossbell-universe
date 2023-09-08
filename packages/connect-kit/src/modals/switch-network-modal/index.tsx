@@ -1,6 +1,6 @@
 import React from "react";
 import { Contract } from "crossbell";
-import { crossbell } from "wagmi/chains";
+import { crossbell } from "@wagmi/chains";
 
 import { createLazyModal } from "../../components";
 import { useSwitchNetworkModal } from "./stores";

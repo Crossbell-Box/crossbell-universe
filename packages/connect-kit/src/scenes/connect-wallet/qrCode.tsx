@@ -3,7 +3,7 @@ import { RequireAtLeastOne } from "type-fest";
 import { Loader } from "@mantine/core";
 import { showNotification } from "@mantine/notifications";
 import { useConnect } from "wagmi";
-import { crossbell } from "wagmi/chains";
+import { crossbell } from "@wagmi/chains";
 
 import { isMobile } from "../../utils";
 import { QRCode, ModalHeaderProps } from "../../components";

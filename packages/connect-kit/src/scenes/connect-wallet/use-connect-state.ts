@@ -1,5 +1,5 @@
 import { useAccount, useConnect } from "wagmi";
-import { crossbell } from "wagmi/chains";
+import { crossbell } from "@wagmi/chains";
 
 import React from "react";
 

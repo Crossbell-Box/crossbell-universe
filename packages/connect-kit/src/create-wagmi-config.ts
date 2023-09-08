@@ -4,7 +4,7 @@ import {
 	type CreateConfigParameters,
 	type Config,
 } from "wagmi";
-import { crossbell } from "wagmi/chains";
+import { crossbell } from "@wagmi/chains";
 import { publicProvider } from "wagmi/providers/public";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";

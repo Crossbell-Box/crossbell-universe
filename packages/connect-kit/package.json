@@ -42,7 +42,7 @@
 		"@mantine/core": "^6",
 		"@mantine/hooks": "^6",
 		"@mantine/notifications": "^6",
-		"@wagmi/connectors": "^3.1.1",
+		"@wagmi/chains": "^1.8.0",
 		"@web3modal/ethereum": "^2.7.1",
 		"canvas-confetti": "^1",
 		"check-password-strength": "^2",

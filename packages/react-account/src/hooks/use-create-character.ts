@@ -1,7 +1,6 @@
 import { CharacterMetadata } from "crossbell";
 import { useMutation, useQueryClient } from "@tanstack/react-query";
 import { showNotification } from "@mantine/notifications";
-import { useAccount } from "wagmi";
 import { indexer } from "@crossbell/indexer";
 import {
 	SCOPE_KEY_CHARACTER,
@@ -13,13 +12,14 @@ import {
 import { asyncRetry } from "@crossbell/store/utils";
 import { useCrossbellModel } from "./crossbell-model";
 import { useContract } from "./use-contract";
+import { useConnectedAccount } from "@crossbell/react-account";
 
 // TODO: refactor this to use account-type-based-hooks
 export function useCreateCharacter() {
-	const { address } = useAccount();
+	const address = useConnectedAccount("wallet")?.address;
 	const contract = useContract();
 	const queryClient = useQueryClient();
-	const account = useCrossbellModel();
+	const model = useCrossbellModel();
 
 	return useMutation(
 		async ({
@@ -42,13 +42,13 @@ export function useCreateCharacter() {
 					queryClient.invalidateQueries(SCOPE_KEY_CHARACTERS(address)),
 					queryClient.invalidateQueries(SCOPE_KEY_PRIMARY_CHARACTER(address)),
 					queryClient.invalidateQueries(SCOPE_KEY_CHARACTER_BY_HANDLE(handle)),
-					account.wallet.refresh().then(async () => {
+					model.wallet.refresh().then(async () => {
 						const character = await asyncRetry(async (RETRY) => {
 							return (await indexer.character.getByHandle(handle)) || RETRY;
 						});
 
 						if (character) {
-							account.wallet.switchCharacter(character);
+							model.wallet.switchCharacter(character);
 						}
 					}),
 				]);

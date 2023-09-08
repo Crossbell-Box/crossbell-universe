@@ -13,6 +13,7 @@ export type ContractProvider = Exclude<
 	Parameters<typeof createContract>[0],
 	string | undefined
 >;
+export type ContractActions = ReturnType<typeof contractActions>;
 
 export function contractActions(
 	options: Omit<InjectContractCheckerOptions, "contract">,

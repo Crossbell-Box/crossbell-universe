@@ -14,8 +14,10 @@ import {
 	WalletActionsDelegate,
 } from "./features/wallet";
 import { markSSRReady, SSRReadyState } from "./features/ssr-ready";
+import { tipsActions } from "./features/tips";
 import { contractActions, ContractDelegate } from "./features/contract";
 import { persist } from "./features/persist";
+import { getCurrentAccount } from "./features/account-action";
 
 export type CrossbellModelDelegate = Omit<EmailActionsDelegate, "getContract"> &
 	Omit<WalletActionsDelegate, "getContract"> &
@@ -27,16 +29,17 @@ export class CrossbellModel extends OrchModel<CrossbellModelState> {
 	readonly email: ReturnType<typeof emailActions>;
 	readonly wallet: ReturnType<typeof walletActions>;
 	readonly contract: ReturnType<typeof contractActions>;
+	readonly tips: ReturnType<typeof tipsActions>;
 
 	constructor(delegate: CrossbellModelDelegate, storage: StateStorage | null) {
 		super({ ssrReady: false, wallet: null, email: null, _siwe: {} });
 
-		this.email = emailActions(this, delegate);
+		const getContract = () => this.contract.get();
+		const getIndexer = delegate.getIndexer;
 
-		this.wallet = walletActions(this, {
-			getIndexer: delegate.getIndexer,
-			getContract: () => this.contract.get(),
-		});
+		this.email = emailActions(this, { ...delegate, getContract });
+		this.wallet = walletActions(this, { getIndexer, getContract });
+		this.tips = tipsActions(this, { refreshMiraBalance: () => this.refresh() });
 
 		this.contract = contractActions({
 			getCurrentAddress: () => {
@@ -53,10 +56,10 @@ export class CrossbellModel extends OrchModel<CrossbellModelState> {
 	}
 
 	getCurrentAccount(): EmailAccount | WalletAccount | null {
-		const { email, wallet, ssrReady } = this.getState();
+		const { ssrReady } = this.getState();
 
 		if (ssrReady) {
-			return email ?? wallet ?? null;
+			return getCurrentAccount(this);
 		} else {
 			return null;
 		}

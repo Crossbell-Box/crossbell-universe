@@ -351,7 +351,7 @@ export function emailTip({
 	characterId: Numberish;
 	noteId?: Numberish;
 	amount: bigint;
-}): Promise<{ transactionHash: string; data: boolean }> {
+}): Promise<{ transactionHash: Address; data: boolean }> {
 	return request(`/newbie/contract/tips`, {
 		method: "POST",
 		token,

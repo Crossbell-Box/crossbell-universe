@@ -1,86 +1,39 @@
-import type { Numberish } from "crossbell";
-import type { Address } from "viem";
+import type { CrossbellModel } from "@crossbell/store";
+import {
+	useMutation,
+	useQueryClient,
+	type UseMutationOptions,
+} from "@tanstack/react-query";
 
-import { getMiraTokenDecimals, emailTip } from "@crossbell/store/apis";
 import { useCrossbellModel } from "../crossbell-model";
-import { createAccountTypeBasedMutationHooks } from "../account-type-based-hooks";
-
 import { SCOPE_KEY_TIPS_LIST } from "./use-tip-list";
 
-export type UseTipOptions = {
-	amount: number;
-	characterId: Numberish;
-	noteId?: Numberish;
-	feeReceiver?: Address;
-};
+export type UseTipOptions = Parameters<CrossbellModel["tips"]["send"]>[0];
+export type UseTipResult = Awaited<ReturnType<CrossbellModel["tips"]["send"]>>;
 
-export const useTip = createAccountTypeBasedMutationHooks<void, UseTipOptions>(
-	{ actionDesc: "send tip", withParams: false },
-	() => {
-		const model = useCrossbellModel();
+export function useTip(
+	mutationOptions?: UseMutationOptions<UseTipResult, unknown, UseTipOptions>,
+) {
+	const model = useCrossbellModel();
+	const queryClient = useQueryClient();
 
-		return {
-			wallet: {
-				supportOPSign: false,
+	return useMutation((options) => model.tips.send(options), {
+		...mutationOptions,
 
-				async action(
-					{ characterId, noteId: toNoteId, amount, feeReceiver },
-					{ contract, account },
-				) {
-					if (account.character?.characterId) {
-						const decimal = await getMiraTokenDecimals(contract);
-						const options = {
-							fromCharacterId: account.character.characterId,
-							toCharacterId: characterId,
-							amount: BigInt(amount) * BigInt(10) ** BigInt(decimal),
-						};
+		onSuccess(...params) {
+			const { characterId, noteId } = params[1];
 
-						if (toNoteId) {
-							return feeReceiver
-								? contract.tipsWithFee.tipCharacterForNote({
-										...options,
-										toNoteId,
-										feeReceiver,
-								  })
-								: contract.tips.tipCharacterForNote({
-										...options,
-										toNoteId,
-								  });
-						} else {
-							return feeReceiver
-								? contract.tipsWithFee.tipCharacter({ ...options, feeReceiver })
-								: contract.tips.tipCharacter(options);
-						}
-					}
-				},
-			},
+			return Promise.all([
+				mutationOptions?.onSuccess?.(...params),
 
-			async email({ characterId, noteId, amount }, { contract, account }) {
-				const decimal = await getMiraTokenDecimals(contract);
-
-				return emailTip({
-					token: account.token,
-					characterId,
-					noteId,
-					amount: BigInt(amount) * BigInt(10) ** BigInt(decimal),
-				});
-			},
-
-			onSuccess({ queryClient, variables, account }) {
-				const { characterId, noteId } = variables;
-
-				return Promise.all([
-					model.refresh(),
-
-					queryClient.invalidateQueries(
-						SCOPE_KEY_TIPS_LIST({
-							toCharacterId: characterId,
-							toNoteId: noteId,
-							characterId: account?.character?.characterId,
-						}),
-					),
-				]);
-			},
-		};
-	},
-);
+				queryClient.invalidateQueries(
+					SCOPE_KEY_TIPS_LIST({
+						toCharacterId: characterId,
+						toNoteId: noteId,
+						characterId: model.getCurrentCharacterId(),
+					}),
+				),
+			]);
+		},
+	});
+}

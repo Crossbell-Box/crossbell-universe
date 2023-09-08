@@ -19,7 +19,9 @@ export type AccountBalance = {
 	value: bigint;
 };
 
-export interface BaseAccount<T extends string> {
+export type AccountType = "wallet" | "email";
+
+export interface BaseAccount<T extends AccountType> {
 	type: T;
 	character: CharacterEntity | null;
 	balance: AccountBalance;

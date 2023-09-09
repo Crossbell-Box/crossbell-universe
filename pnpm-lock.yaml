@@ -609,6 +609,9 @@ importers:
       '@crossbell/notification':
         specifier: ^1.5.13
         version: link:../../packages/notification
+      '@crossbell/store':
+        specifier: workspace:*
+        version: link:../../packages/store
       '@crossbell/ui':
         specifier: ^1.5.13
         version: link:../../packages/ui

@@ -13,14 +13,9 @@ import { BaseSigner } from "../types";
 type Siwe = { token: string };
 
 export async function siweSignIn(
+	address: Address,
 	signer: BaseSigner,
-): Promise<Siwe & { address: Address }> {
-	const address = await signer.getAddress();
-
-	if (!address) {
-		throw new Error(`SignInError: invalid address ${address}`);
-	}
-
+): Promise<Siwe> {
 	const { message } = await request<{ message: string }>("/siwe/challenge", {
 		method: "POST",
 		body: {
@@ -39,7 +34,7 @@ export async function siweSignIn(
 		},
 	});
 
-	return { token, address };
+	return { token };
 }
 
 export function siweGetAccount(siwe: Siwe): Promise<{ address: Address }> {

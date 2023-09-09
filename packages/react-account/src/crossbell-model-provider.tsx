@@ -1,5 +1,9 @@
 import React from "react";
-import { ContextModelProvider, useLocalModel } from "@orch/react";
+import {
+	ContextModelProvider,
+	useLocalModel,
+	useModelState,
+} from "@orch/react";
 import {
 	CrossbellModel,
 	CrossbellModelDelegate,
@@ -53,12 +57,13 @@ export const CrossbellModelProvider = ({
 
 	const storage = React.useMemo(getStorage, [getStorage]);
 	const model = useLocalModel(CrossbellModel, [delegate, storage]);
+	const address = useModelState(model, (s) => s.wallet?.address, []);
 
 	React.useEffect(() => {
-		if (provider) {
-			model.contract.setProvider(provider);
+		if (provider && address) {
+			model.contract.setProvider({ address, provider });
 		}
-	}, [provider, model]);
+	}, [provider, address, model]);
 
 	return (
 		<ContextModelProvider value={[model]}>{children}</ContextModelProvider>

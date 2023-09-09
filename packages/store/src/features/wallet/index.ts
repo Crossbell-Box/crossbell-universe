@@ -90,7 +90,13 @@ export function walletActions<T extends WalletState>(
 		});
 
 		return async (signer: BaseSigner) => {
-			update(await siwe_.signIn(signer));
+			const address = model.getState().wallet?.address;
+
+			if (!address) {
+				throw new Error(`SignInError: invalid address ${address}`);
+			}
+
+			update(await siwe_.signIn(address, signer));
 		};
 	})();
 

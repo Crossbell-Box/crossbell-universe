@@ -1,9 +1,8 @@
-import type { Address, Hex } from "viem";
+import type { Hex } from "viem";
 import type { CharacterEntity } from "crossbell";
 
 export type BaseSigner = {
 	signMessage: (msg: string) => Promise<Hex | undefined>;
-	getAddress: () => Promise<Address | undefined>;
 };
 
 export type StateStorage = {

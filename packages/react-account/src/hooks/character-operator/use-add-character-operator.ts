@@ -1,55 +1,47 @@
-import { indexer } from "@crossbell/indexer";
-import { CharacterPermissionKey } from "crossbell";
-import { type Address } from "viem";
+import {
+	useMutation,
+	UseMutationOptions,
+	useQueryClient,
+} from "@tanstack/react-query";
+import type { CrossbellModel } from "@crossbell/store";
 
-import { asyncRetry } from "@crossbell/store/utils";
 import { useCrossbellModel } from "../crossbell-model";
-import { createAccountTypeBasedMutationHooks } from "../account-type-based-hooks";
 import {
 	GET_CHARACTER_OPERATORS_SCOPE_KEY,
 	SCOPE_KEY_CHARACTER_OPERATOR,
 } from "./const";
-import { haveSamePermissions } from "./utils";
 
-export const useAddCharacterOperator = createAccountTypeBasedMutationHooks<
-	void,
-	{
-		characterId: number;
-		operator: Address;
-		permissions: CharacterPermissionKey[];
-	}
->({ actionDesc: "adding operator", withParams: false }, () => {
-	const account = useCrossbellModel();
+export type UseAddCharacterOperatorOptions = Parameters<
+	CrossbellModel["operator"]["add"]
+>[0];
 
-	return {
-		wallet: {
-			supportOPSign: false,
+export type UseAddCharacterOperatorResult = Awaited<
+	ReturnType<CrossbellModel["operator"]["add"]>
+>;
 
-			async action({ characterId, operator, permissions }, { contract }) {
-				await contract.operator.grantForCharacter({
-					characterId,
-					operator,
-					permissions,
-				});
+export function useAddCharacterOperator(
+	options?: UseMutationOptions<
+		UseAddCharacterOperatorResult,
+		unknown,
+		UseAddCharacterOperatorOptions
+	>,
+) {
+	const model = useCrossbellModel();
+	const queryClient = useQueryClient();
 
-				await asyncRetry(async (RETRY) => {
-					const op = await indexer.operator.getForCharacter(
-						characterId,
-						operator,
-					);
-					return haveSamePermissions(permissions, op?.permissions) || RETRY;
-				});
-			},
-		},
+	return useMutation(model.operator.add, {
+		...options,
 
-		onSuccess({ queryClient, variables }) {
+		onSuccess(...params) {
+			const variables = params[1];
+
 			return Promise.all([
-				account.refresh(),
+				options?.onSuccess?.(...params),
 				queryClient.invalidateQueries(SCOPE_KEY_CHARACTER_OPERATOR(variables)),
 				queryClient.invalidateQueries(
 					GET_CHARACTER_OPERATORS_SCOPE_KEY(variables),
 				),
 			]);
 		},
-	};
-});
+	});
+}

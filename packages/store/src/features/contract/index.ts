@@ -5,6 +5,7 @@ import {
 	InjectContractCheckerOptions,
 	ContractCheckerDelegate,
 } from "./inject-contract-checker";
+import { Address } from "viem";
 
 export * from "./errors";
 
@@ -26,9 +27,13 @@ export function contractActions(
 			return contract;
 		},
 
-		setProvider(provider: ContractProvider) {
-			const account = options.getCurrentAddress() ?? undefined;
-
+		setProvider({
+			provider,
+			address: account,
+		}: {
+			provider: ContractProvider;
+			address: Address;
+		}) {
 			contract = injectContractChecker(
 				createContract(provider, { account }),
 				options,

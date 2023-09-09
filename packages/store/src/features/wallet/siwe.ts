@@ -32,8 +32,8 @@ export function siweActions<T extends SiweState>(model: OrchModel<T>) {
 		return siwe;
 	};
 
-	const signIn = async (signer: BaseSigner) => {
-		const { token, address } = await siweSignIn(signer);
+	const signIn = async (address: Address, signer: BaseSigner) => {
+		const { token } = await siweSignIn(address, signer);
 
 		return await refresh(address, token);
 	};

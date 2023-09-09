@@ -90,9 +90,6 @@ export function ConnectKitProvider({
 	const getSigner = useRefCallback(
 		async (): Promise<BaseSigner | undefined> => {
 			return {
-				async getAddress() {
-					return account.address;
-				},
 				async signMessage(message) {
 					return (await account.connector?.getWalletClient())?.signMessage({
 						message,

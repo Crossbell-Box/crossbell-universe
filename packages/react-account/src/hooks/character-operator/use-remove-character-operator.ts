@@ -1,49 +1,47 @@
-import { indexer } from "@crossbell/indexer";
+import {
+	useMutation,
+	UseMutationOptions,
+	useQueryClient,
+} from "@tanstack/react-query";
+import { CrossbellModel } from "@crossbell/store";
 
-import { asyncRetry } from "@crossbell/store/utils";
 import { useCrossbellModel } from "../crossbell-model";
-import { createAccountTypeBasedMutationHooks } from "../account-type-based-hooks";
 import {
 	GET_CHARACTER_OPERATORS_SCOPE_KEY,
 	SCOPE_KEY_CHARACTER_OPERATOR,
 } from "./const";
-import { type Address } from "viem";
 
-export const useRemoveCharacterOperator = createAccountTypeBasedMutationHooks<
-	void,
-	{ characterId: number; operator: Address }
->({ actionDesc: "", withParams: false }, () => {
-	const account = useCrossbellModel();
+export type UseRemoveCharacterOperatorOptions = Parameters<
+	CrossbellModel["operator"]["remove"]
+>[0];
 
-	return {
-		wallet: {
-			supportOPSign: false,
+export type UseRemoveCharacterOperatorResult = Awaited<
+	ReturnType<CrossbellModel["operator"]["remove"]>
+>;
 
-			async action({ characterId, operator }, { contract }) {
-				await contract.operator.grantForCharacter({
-					characterId,
-					operator,
-					permissions: [],
-				});
+export function useRemoveCharacterOperator(
+	options?: UseMutationOptions<
+		UseRemoveCharacterOperatorResult,
+		unknown,
+		UseRemoveCharacterOperatorOptions
+	>,
+) {
+	const model = useCrossbellModel();
+	const queryClient = useQueryClient();
 
-				await asyncRetry(async (RETRY) => {
-					const op = await indexer.operator.getForCharacter(
-						characterId,
-						operator,
-					);
-					return op?.permissions.length === 0 || RETRY;
-				});
-			},
-		},
+	return useMutation(model.operator.remove, {
+		...options,
 
-		onSuccess({ queryClient, variables }) {
+		onSuccess(...params) {
+			const variables = params[1];
+
 			return Promise.all([
-				account.refresh(),
+				options?.onSuccess?.(...params),
 				queryClient.invalidateQueries(SCOPE_KEY_CHARACTER_OPERATOR(variables)),
 				queryClient.invalidateQueries(
 					GET_CHARACTER_OPERATORS_SCOPE_KEY(variables),
 				),
 			]);
 		},
-	};
-});
+	});
+}

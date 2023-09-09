@@ -17,6 +17,7 @@ import { markSSRReady, SSRReadyState } from "./features/ssr-ready";
 import { tipsActions } from "./features/tips";
 import { contractActions, ContractDelegate } from "./features/contract";
 import { persist } from "./features/persist";
+import { operatorActions } from "./features/operator";
 import { getCurrentAccount } from "./features/account-action";
 
 export type CrossbellModelDelegate = Omit<EmailActionsDelegate, "getContract"> &
@@ -30,6 +31,7 @@ export class CrossbellModel extends OrchModel<CrossbellModelState> {
 	readonly wallet: ReturnType<typeof walletActions>;
 	readonly contract: ReturnType<typeof contractActions>;
 	readonly tips: ReturnType<typeof tipsActions>;
+	readonly operator: ReturnType<typeof operatorActions>;
 
 	constructor(delegate: CrossbellModelDelegate, storage: StateStorage | null) {
 		super({ ssrReady: false, wallet: null, email: null, _siwe: {} });
@@ -37,9 +39,25 @@ export class CrossbellModel extends OrchModel<CrossbellModelState> {
 		const getContract = () => this.contract.get();
 		const getIndexer = delegate.getIndexer;
 
-		this.email = emailActions(this, { ...delegate, getContract });
-		this.wallet = walletActions(this, { getIndexer, getContract });
-		this.tips = tipsActions(this, { refreshMiraBalance: () => this.refresh() });
+		this.email = emailActions(this, {
+			...delegate,
+			getContract,
+		});
+
+		this.wallet = walletActions(this, {
+			getIndexer,
+			getContract,
+		});
+
+		this.tips = tipsActions(this, {
+			refreshMiraBalance: () => this.refresh(),
+		});
+
+		this.operator = operatorActions(this, {
+			getIndexer,
+			getContract,
+			refreshCharacter: () => this.refresh(),
+		});
 
 		this.contract = contractActions({
 			getCurrentAddress: () => {

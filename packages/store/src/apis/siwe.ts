@@ -4,6 +4,7 @@ import {
 	LinkItemType,
 	NoteEntity,
 	NoteMetadata,
+	Numberish,
 } from "crossbell";
 import { type Address } from "viem";
 
@@ -111,11 +112,11 @@ export async function siweLinkCharacter({
 	data,
 }: {
 	siwe: Siwe;
-	characterId: number;
-	toCharacterId: number;
+	characterId: Numberish;
+	toCharacterId: Numberish;
 	linkType: string;
 	data?: string;
-}): Promise<{ transactionHash: string; data: string }> {
+}): Promise<{ transactionHash: Address; data: string }> {
 	return request(
 		`/siwe/contract/characters/${characterId}/links/characters/${toCharacterId}/${linkType}`,
 		{ method: "PUT", token: siwe.token, body: { data } },
@@ -132,11 +133,11 @@ export async function siweLinkCharacters({
 }: {
 	siwe: Siwe;
 	characterId: number;
-	toCharacterIds: number[];
-	toAddresses: string[];
+	toCharacterIds: Numberish[];
+	toAddresses: Address[];
 	linkType: string;
 	data?: string;
-}): Promise<{ transactionHash: string; data: string }> {
+}): Promise<{ transactionHash: Address; data: string }> {
 	return request(`/siwe/contract/characters/${characterId}/links/characters`, {
 		method: "PUT",
 		token: siwe.token,
@@ -151,10 +152,10 @@ export async function siweUnlinkCharacter({
 	linkType,
 }: {
 	siwe: Siwe;
-	characterId: number;
-	toCharacterId: number;
+	characterId: Numberish;
+	toCharacterId: Numberish;
 	linkType: string;
-}): Promise<{ transactionHash: string; data: string }> {
+}): Promise<{ transactionHash: Address; data: string }> {
 	return request(
 		`/siwe/contract/characters/${characterId}/links/characters/${toCharacterId}/${linkType}`,
 		{ method: "DELETE", token: siwe.token },

@@ -1,67 +1,32 @@
-import { CharacterLinkType } from "@crossbell/indexer";
+import type { CrossbellModel } from "@crossbell/store";
+import type { CharacterLinkType } from "@crossbell/indexer";
+import { useMutation, UseMutationOptions } from "@tanstack/react-query";
 
-import {
-	getIsLinked,
-	linkCharacter,
-	siweLinkCharacter,
-} from "@crossbell/store/apis";
-import {
-	AccountTypeBasedMutationOptions,
-	createAccountTypeBasedMutationHooks,
-} from "../account-type-based-hooks";
+import { useCrossbellModel } from "../crossbell-model";
 
-export type LinkCharacterOptions = AccountTypeBasedMutationOptions<
-	typeof useLinkCharacter
+export type LinkCharacterVariables = Omit<
+	Parameters<CrossbellModel["link"]["linkCharacter"]>[0],
+	"linkType"
 >;
 
-export const useLinkCharacter = createAccountTypeBasedMutationHooks<
-	CharacterLinkType,
-	{ characterId: number }
->({ actionDesc: "linking character", withParams: true }, (linkType) => ({
-	async email({ characterId }, { account }) {
-		const isLinked = await getIsLinked({
-			fromCharacterId: account.character.characterId,
-			toCharacterId: characterId,
-			linkType,
-		});
+export type LinkCharacterResult = Awaited<
+	ReturnType<CrossbellModel["link"]["linkCharacter"]>
+>;
 
-		if (isLinked) return null;
+export type LinkCharacterOptions = UseMutationOptions<
+	LinkCharacterResult,
+	unknown,
+	LinkCharacterVariables
+>;
 
-		return linkCharacter({
-			token: account.token,
-			toCharacterId: characterId,
-			linkType,
-		});
-	},
+export const useLinkCharacter = (
+	linkType: CharacterLinkType,
+	options?: LinkCharacterOptions,
+) => {
+	const model = useCrossbellModel();
 
-	wallet: {
-		supportOPSign: true,
-
-		async action({ characterId }, { contract, account, siwe }) {
-			if (account?.character?.characterId) {
-				const isLinked = await getIsLinked({
-					fromCharacterId: account.character?.characterId,
-					toCharacterId: characterId,
-					linkType,
-				});
-
-				if (isLinked) return null;
-
-				if (siwe) {
-					return siweLinkCharacter({
-						characterId: account.character.characterId,
-						siwe,
-						toCharacterId: characterId,
-						linkType,
-					});
-				} else {
-					return contract.link.linkCharacter({
-						fromCharacterId: account.character.characterId,
-						toCharacterId: characterId,
-						linkType,
-					});
-				}
-			}
-		},
-	},
-}));
+	return useMutation(
+		(o) => model.link.linkCharacter({ ...o, linkType }),
+		options,
+	);
+};

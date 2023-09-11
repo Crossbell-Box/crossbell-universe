@@ -1,5 +1,6 @@
 import { useQueryClient } from "@tanstack/react-query";
 import React from "react";
+import type { Numberish } from "crossbell";
 
 import {
 	CharacterLinkType,
@@ -11,8 +12,8 @@ import { useCrossbellModelState } from "../crossbell-model";
 
 import { useLinkCharacter, LinkCharacterOptions } from "./use-link-character";
 import {
-	UnlinkCharacterOptions,
 	useUnlinkCharacter,
+	UnlinkCharacterOptions,
 } from "./use-unlink-character";
 import {
 	useLinkCharacters,
@@ -120,8 +121,8 @@ function invalidateQueries({
 	currentCharacterId,
 }: {
 	queryClient: ReturnType<typeof useQueryClient>;
-	currentCharacterId: number | undefined;
-	characterId: number;
+	currentCharacterId: Numberish | undefined;
+	characterId: Numberish;
 }) {
 	return [
 		queryClient.invalidateQueries(

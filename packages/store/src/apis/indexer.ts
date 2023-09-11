@@ -1,4 +1,4 @@
-import { CharacterLinkType, indexer, NoteLinkType } from "@crossbell/indexer";
+import { indexer, CharacterLinkType, NoteLinkType } from "@crossbell/indexer";
 import { type Address } from "viem";
 import { NoteEntity, Numberish } from "crossbell";
 

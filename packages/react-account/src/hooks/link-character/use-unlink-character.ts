@@ -1,67 +1,32 @@
-import { CharacterLinkType } from "@crossbell/indexer";
+import { useMutation, type UseMutationOptions } from "@tanstack/react-query";
+import type { CrossbellModel } from "@crossbell/store";
+import type { CharacterLinkType } from "@crossbell/indexer";
 
-import {
-	unlinkCharacter,
-	siweUnlinkCharacter,
-	getIsLinked,
-} from "@crossbell/store/apis";
-import {
-	AccountTypeBasedMutationOptions,
-	createAccountTypeBasedMutationHooks,
-} from "../account-type-based-hooks";
+import { useCrossbellModel } from "../crossbell-model";
 
-export type UnlinkCharacterOptions = AccountTypeBasedMutationOptions<
-	typeof useUnlinkCharacter
+export type UnlinkCharacterVariables = Omit<
+	Parameters<CrossbellModel["link"]["unlinkCharacter"]>[0],
+	"linkType"
 >;
 
-export const useUnlinkCharacter = createAccountTypeBasedMutationHooks<
-	CharacterLinkType,
-	{ characterId: number }
->({ actionDesc: "unlinking character", withParams: true }, (linkType) => ({
-	async email({ characterId }, { account }) {
-		const isLinked = await getIsLinked({
-			fromCharacterId: account.character.characterId,
-			toCharacterId: characterId,
-			linkType,
-		});
+export type UnlinkCharacterResult = Awaited<
+	ReturnType<CrossbellModel["link"]["unlinkCharacter"]>
+>;
 
-		if (!isLinked) return null;
+export type UnlinkCharacterOptions = UseMutationOptions<
+	UnlinkCharacterResult,
+	unknown,
+	UnlinkCharacterVariables
+>;
 
-		return unlinkCharacter({
-			token: account.token,
-			toCharacterId: characterId,
-			linkType,
-		});
-	},
+export function useUnlinkCharacter(
+	linkType: CharacterLinkType,
+	options?: UnlinkCharacterOptions,
+) {
+	const model = useCrossbellModel();
 
-	wallet: {
-		supportOPSign: true,
-
-		async action({ characterId }, { account, siwe, contract }) {
-			if (account?.character?.characterId) {
-				const isLinked = await getIsLinked({
-					fromCharacterId: account.character.characterId,
-					toCharacterId: characterId,
-					linkType,
-				});
-
-				if (!isLinked) return null;
-
-				if (siwe) {
-					return siweUnlinkCharacter({
-						characterId: account.character.characterId,
-						siwe,
-						toCharacterId: characterId,
-						linkType,
-					});
-				} else {
-					return contract.link.unlinkCharacter({
-						fromCharacterId: account.character.characterId,
-						toCharacterId: characterId,
-						linkType: linkType,
-					});
-				}
-			}
-		},
-	},
-}));
+	return useMutation(
+		(o) => model.link.unlinkCharacter({ ...o, linkType }),
+		options,
+	);
+}

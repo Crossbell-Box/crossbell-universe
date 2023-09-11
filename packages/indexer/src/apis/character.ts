@@ -1,7 +1,8 @@
 import { useInfiniteQuery, useQuery } from "@tanstack/react-query";
-import { indexer } from "../indexer";
 import { type Address } from "viem";
+import type { Numberish } from "crossbell";
 
+import { indexer } from "../indexer";
 import { CharacterLinkType } from "./types";
 
 const SCOPE_KEY = ["indexer", "characters"];
@@ -108,7 +109,7 @@ export function usePrimaryCharacter(address?: Address) {
 
 // get the following status of a character
 
-export const SCOPE_KEY_CHARACTER_FOLLOW_STATS = (characterId?: number) => {
+export const SCOPE_KEY_CHARACTER_FOLLOW_STATS = (characterId?: Numberish) => {
 	return [...SCOPE_KEY, "follow", "stats", characterId];
 };
 export function useCharacterFollowStats(
@@ -143,8 +144,8 @@ export function useCharacterFollowStats(
 }
 
 export const SCOPE_KEY_CHARACTER_FOLLOW_RELATION = (
-	fromCharacterId?: number,
-	toCharacterID?: number,
+	fromCharacterId?: Numberish,
+	toCharacterID?: Numberish,
 ) => {
 	return [...SCOPE_KEY, "follow", "relation", fromCharacterId, toCharacterID];
 };

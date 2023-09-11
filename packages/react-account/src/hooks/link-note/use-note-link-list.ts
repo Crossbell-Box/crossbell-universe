@@ -1,7 +1,8 @@
 import React from "react";
 import { CharacterEntity, LinkEntity } from "crossbell";
 import { useInfiniteQuery } from "@tanstack/react-query";
-import { indexer, NoteLinkType } from "@crossbell/indexer";
+import { indexer } from "@crossbell/indexer";
+import { NoteLinkType } from "@crossbell/indexer";
 
 import { useAccountCharacter } from "../use-account-character";
 import { useIsNoteLinked } from "./use-is-note-linked";

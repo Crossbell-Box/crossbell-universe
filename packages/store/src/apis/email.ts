@@ -213,10 +213,10 @@ export async function linkCharacter({
 	data,
 }: {
 	token: string;
-	toCharacterId: number;
+	toCharacterId: Numberish;
 	linkType: string;
 	data?: string;
-}): Promise<{ transactionHash: string; data: string }> {
+}): Promise<{ transactionHash: Address; data: string }> {
 	return request(
 		`/newbie/contract/links/characters/${toCharacterId}/${linkType}`,
 		{ method: "PUT", token, body: { data } },
@@ -231,11 +231,11 @@ export async function linkCharacters({
 	data,
 }: {
 	token: string;
-	toCharacterIds: number[];
-	toAddresses: string[];
+	toCharacterIds: Numberish[];
+	toAddresses: Address[];
 	linkType: string;
 	data?: string;
-}): Promise<{ transactionHash: string; data: string }> {
+}): Promise<{ transactionHash: Address; data: string }> {
 	return request(`/newbie/contract/links/characters`, {
 		method: "PUT",
 		token,
@@ -249,9 +249,9 @@ export async function unlinkCharacter({
 	linkType,
 }: {
 	token: string;
-	toCharacterId: number;
+	toCharacterId: Numberish;
 	linkType: string;
-}): Promise<{ transactionHash: string; data: string }> {
+}): Promise<{ transactionHash: Address; data: string }> {
 	return request(
 		`/newbie/contract/links/characters/${toCharacterId}/${linkType}`,
 		{ method: "DELETE", token },

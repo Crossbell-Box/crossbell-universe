@@ -26,7 +26,7 @@ import { IMAGES, useReCAPTCHA } from "../../utils";
 
 import styles from "./index.module.css";
 import { useMutation } from "@tanstack/react-query";
-import { asyncRetry } from "@crossbell/react-account/utils";
+import { asyncRetry } from "@crossbell/store/utils";
 import { parseEther } from "viem";
 
 export type WalletClaimCSBProps = {

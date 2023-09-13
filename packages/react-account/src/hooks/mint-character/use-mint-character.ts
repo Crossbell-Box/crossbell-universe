@@ -1,50 +1,52 @@
-import { useUploadToIpfs } from "@crossbell/util-hooks";
+import { useCrossbellModel } from "@crossbell/react-account";
+import {
+	useMutation,
+	UseMutationOptions,
+	useQueryClient,
+} from "@tanstack/react-query";
+import { CrossbellModel } from "@crossbell/store";
+import {
+	SCOPE_KEY_CHARACTER,
+	SCOPE_KEY_CHARACTER_BY_HANDLE,
+	SCOPE_KEY_CHARACTERS,
+	SCOPE_KEY_PRIMARY_CHARACTER,
+} from "@crossbell/indexer";
 
-import { createAccountTypeBasedMutationHooks } from "../account-type-based-hooks";
-import { useCreateCharacter } from "../use-create-character";
-import { BaseCharacterProfileForm } from "./use-character-profile-form";
+export type UseMintCharacterVariables = Parameters<
+	CrossbellModel["character"]["create"]
+>[0];
 
-export type UseMintCharacterParams = Pick<
-	BaseCharacterProfileForm,
-	"avatar" | "handle" | "username" | "bio"
+export type UseMintCharacterResult = Awaited<
+	ReturnType<CrossbellModel["character"]["create"]>
 >;
 
-export const useMintCharacter = createAccountTypeBasedMutationHooks<
-	void,
-	UseMintCharacterParams
->(
-	{
-		actionDesc: "mint-character",
-		withParams: false,
-		connectType: "wallet",
-		mustHaveCharacter: false,
-	},
-	() => {
-		const createCharacter = useCreateCharacter();
-		const uploadToIpfs = useUploadToIpfs();
+export type UseMintCharacterOptions = UseMutationOptions<
+	UseMintCharacterResult,
+	unknown,
+	UseMintCharacterVariables
+>;
 
-		return {
-			wallet: {
-				supportOPSign: false,
-				async action({ bio, avatar: file, handle, username }) {
-					if (!handle || !username) return;
+export function useMintCharacter(options?: UseMintCharacterOptions) {
+	const model = useCrossbellModel();
+	const queryClient = useQueryClient();
 
-					const avatar = file
-						? typeof file === "string"
-							? file
-							: await uploadToIpfs.mutateAsync(file)
-						: null;
+	return useMutation(model.character.create, {
+		...options,
+		onSuccess(...params) {
+			const character = params[0];
+			const address = character?.owner;
 
-					await createCharacter.mutateAsync({
-						handle,
-						metadata: {
-							bio,
-							name: username,
-							avatars: [avatar].filter(Boolean) as string[],
-						},
-					});
-				},
-			},
-		};
-	},
-);
+			return Promise.all([
+				options?.onSuccess?.(...params),
+				queryClient.invalidateQueries(
+					SCOPE_KEY_CHARACTER(character?.characterId),
+				),
+				queryClient.invalidateQueries(SCOPE_KEY_CHARACTERS(address)),
+				queryClient.invalidateQueries(SCOPE_KEY_PRIMARY_CHARACTER(address)),
+				queryClient.invalidateQueries(
+					SCOPE_KEY_CHARACTER_BY_HANDLE(character?.handle),
+				),
+			]);
+		},
+	});
+}

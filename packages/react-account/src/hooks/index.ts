@@ -13,7 +13,6 @@ export * from "./use-account-character-id";
 export * from "./use-account-characters";
 export * from "./use-connected-account";
 export * from "./use-connected-action";
-export * from "./use-create-character";
 export * from "./use-delete-character";
 export * from "./use-delete-email-account";
 export * from "./use-disconnect-account";

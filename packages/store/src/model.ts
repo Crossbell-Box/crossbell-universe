@@ -20,6 +20,7 @@ import { persist } from "./features/persist";
 import { operatorActions } from "./features/operator";
 import { getCurrentAccount } from "./features/account-action";
 import { linkActions } from "./features/link";
+import { characterActions } from "@crossbell/store/features/character";
 
 export type CrossbellModelDelegate = Omit<EmailActionsDelegate, "getContract"> &
 	Omit<WalletActionsDelegate, "getContract"> &
@@ -34,6 +35,7 @@ export class CrossbellModel extends OrchModel<CrossbellModelState> {
 	readonly tips: ReturnType<typeof tipsActions>;
 	readonly operator: ReturnType<typeof operatorActions>;
 	readonly link: ReturnType<typeof linkActions>;
+	readonly character: ReturnType<typeof characterActions>;
 
 	constructor(delegate: CrossbellModelDelegate, storage: StateStorage | null) {
 		super({ ssrReady: false, wallet: null, email: null, _siwe: {} });
@@ -62,6 +64,7 @@ export class CrossbellModel extends OrchModel<CrossbellModelState> {
 		});
 
 		this.link = linkActions(this);
+		this.character = characterActions(this, this.wallet);
 
 		this.contract = contractActions({
 			getCurrentAddress: () => {

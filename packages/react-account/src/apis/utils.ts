@@ -5,6 +5,7 @@ type RequestConfig<T> = {
 	body?: Record<string, unknown>;
 	token?: string;
 	handleResponse?: (res: Response) => T;
+	endpoint?: string | null;
 };
 
 export function stringify(value: any) {
@@ -14,8 +15,8 @@ export function stringify(value: any) {
 }
 
 export function request<T = any>(
-	url: `/${"newbie" | "siwe"}/${string}`,
-	{ body, method, token, handleResponse }: RequestConfig<T>,
+	url: `/${string}`,
+	{ body, method, token, handleResponse, endpoint }: RequestConfig<T>,
 ): Promise<T> {
 	const headers = new Headers({ "Content-Type": "application/json" });
 
@@ -23,7 +24,7 @@ export function request<T = any>(
 		headers.set("Authorization", `Bearer ${token}`);
 	}
 
-	return fetch(indexer.endpoint + url, {
+	return fetch((endpoint ?? indexer.endpoint) + url, {
 		method,
 		headers,
 		body: body && stringify(body),

@@ -8,12 +8,14 @@ import {
 } from "crossbell";
 import { type Address } from "viem";
 
+import { getNewbieVillaEndpoint } from "../endpoints-config";
 import { request } from "./utils";
 
 export async function registerSendCodeToEmail(
 	email: string,
 ): Promise<{ ok: boolean; msg: string }> {
-	const result = await request("/newbie/account/signup/email", {
+	const result = await request("/account/signup/email", {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "POST",
 		body: { email },
 	});
@@ -29,7 +31,8 @@ export async function registerVerifyEmailCode(body: {
 	email: string;
 	code: string;
 }): Promise<{ ok: boolean; msg: string }> {
-	const result = await request("/newbie/account/signup/email/verify", {
+	const result = await request("/account/signup/email/verify", {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "POST",
 		body,
 	});
@@ -47,7 +50,8 @@ export async function registerByEmail(body: {
 	password: string;
 	characterName: string;
 }): Promise<{ ok: boolean; msg: string; token: string }> {
-	const result = await request("/newbie/account/signup", {
+	const result = await request("/account/signup", {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "PUT",
 		body,
 	});
@@ -63,7 +67,8 @@ export async function connectByEmail(body: {
 	email: string;
 	password: string;
 }): Promise<{ ok: boolean; msg: string; token: string }> {
-	const result = await request("/newbie/account/signin", {
+	const result = await request("/account/signin", {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "POST",
 		body,
 	});
@@ -78,7 +83,8 @@ export async function connectByEmail(body: {
 export async function resetPasswordSendCodeToEmail(
 	email: string,
 ): Promise<{ ok: boolean; msg: string }> {
-	const result = await request("/newbie/account/reset-password/email", {
+	const result = await request("/account/reset-password/email", {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "POST",
 		body: { email },
 	});
@@ -94,7 +100,8 @@ export async function resetPasswordVerifyEmailCode(body: {
 	email: string;
 	code: string;
 }): Promise<{ ok: boolean; msg: string }> {
-	const result = await request("/newbie/account/reset-password/email/verify", {
+	const result = await request("/account/reset-password/email/verify", {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "POST",
 		body,
 	});
@@ -111,7 +118,8 @@ export async function resetPasswordByEmail(body: {
 	emailVerifyCode: string;
 	password: string;
 }): Promise<{ ok: boolean; msg: string }> {
-	const result = await request("/newbie/account/reset-password", {
+	const result = await request("/account/reset-password", {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "POST",
 		body,
 	});
@@ -138,10 +146,11 @@ export type FetchAccountInfoResult =
 export async function fetchAccountInfo(
 	token: string,
 ): Promise<FetchAccountInfoResult> {
-	const { email, characterId, message, csb } = await request(
-		"/newbie/account",
-		{ method: "GET", token },
-	);
+	const { email, characterId, message, csb } = await request("/account", {
+		method: "GET",
+		token,
+		endpoint: getNewbieVillaEndpoint(),
+	});
 
 	if (email && characterId) {
 		return { ok: true, email, characterId, csb };
@@ -154,7 +163,8 @@ export async function updateHandle(
 	token: string,
 	handle: string,
 ): Promise<{ ok: boolean; msg: string }> {
-	return request("/newbie/contract/characters/me/handle", {
+	return request("/contract/characters/me/handle", {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "POST",
 		token,
 		body: { handle },
@@ -162,7 +172,8 @@ export async function updateHandle(
 }
 
 export async function deleteAccount(token: string): Promise<void> {
-	return request("/newbie/account", {
+	return request("/account", {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "DELETE",
 		token,
 		body: {},
@@ -183,10 +194,12 @@ export async function linkNote({
 	linkType: string;
 	data?: string;
 }): Promise<{ transactionHash: string; data: string }> {
-	return request(
-		`/newbie/contract/links/notes/${characterId}/${noteId}/${linkType}`,
-		{ method: "PUT", token, body: { data } },
-	);
+	return request(`/contract/links/notes/${characterId}/${noteId}/${linkType}`, {
+		method: "PUT",
+		token,
+		body: { data },
+		endpoint: getNewbieVillaEndpoint(),
+	});
 }
 
 export async function unlinkNote({
@@ -200,10 +213,11 @@ export async function unlinkNote({
 	noteId: number;
 	linkType: string;
 }): Promise<{ transactionHash: string; data: string }> {
-	return request(
-		`/newbie/contract/links/notes/${characterId}/${noteId}/${linkType}`,
-		{ method: "DELETE", token },
-	);
+	return request(`/contract/links/notes/${characterId}/${noteId}/${linkType}`, {
+		method: "DELETE",
+		token,
+		endpoint: getNewbieVillaEndpoint(),
+	});
 }
 
 export async function linkCharacter({
@@ -217,10 +231,12 @@ export async function linkCharacter({
 	linkType: string;
 	data?: string;
 }): Promise<{ transactionHash: string; data: string }> {
-	return request(
-		`/newbie/contract/links/characters/${toCharacterId}/${linkType}`,
-		{ method: "PUT", token, body: { data } },
-	);
+	return request(`/contract/links/characters/${toCharacterId}/${linkType}`, {
+		method: "PUT",
+		token,
+		body: { data },
+		endpoint: getNewbieVillaEndpoint(),
+	});
 }
 
 export async function linkCharacters({
@@ -236,7 +252,8 @@ export async function linkCharacters({
 	linkType: string;
 	data?: string;
 }): Promise<{ transactionHash: string; data: string }> {
-	return request(`/newbie/contract/links/characters`, {
+	return request(`/contract/links/characters`, {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "PUT",
 		token,
 		body: { data, linkType, toCharacterIds, toAddresses },
@@ -252,10 +269,11 @@ export async function unlinkCharacter({
 	toCharacterId: number;
 	linkType: string;
 }): Promise<{ transactionHash: string; data: string }> {
-	return request(
-		`/newbie/contract/links/characters/${toCharacterId}/${linkType}`,
-		{ method: "DELETE", token },
-	);
+	return request(`/contract/links/characters/${toCharacterId}/${linkType}`, {
+		method: "DELETE",
+		token,
+		endpoint: getNewbieVillaEndpoint(),
+	});
 }
 
 export async function putNote({
@@ -268,7 +286,8 @@ export async function putNote({
 	linkItem?: LinkItemNote;
 	locked?: boolean;
 }): Promise<{ transactionHash: string; data: { noteId: number } }> {
-	return request(`/newbie/contract/notes`, {
+	return request(`/contract/notes`, {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "PUT",
 		token,
 		body,
@@ -284,7 +303,8 @@ export async function updateNote({
 	metadata: NoteMetadata;
 	noteId: NoteEntity["noteId"];
 }): Promise<{ transactionHash: string; data: string }> {
-	return request(`/newbie/contract/notes/${noteId}/metadata`, {
+	return request(`/contract/notes/${noteId}/metadata`, {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "POST",
 		token,
 		body: { metadata },
@@ -298,7 +318,8 @@ export async function deleteNote({
 	token: string;
 	noteId: NoteEntity["noteId"];
 }): Promise<{ transactionHash: string; data: string }> {
-	return request(`/newbie/contract/notes/${noteId}`, {
+	return request(`/contract/notes/${noteId}`, {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "DELETE",
 		token,
 	});
@@ -309,7 +330,8 @@ export async function refillBalance({
 }: {
 	token: string;
 }): Promise<{ balance: string } | { ok: boolean; message: string }> {
-	return request(`/newbie/account/balance/refill`, {
+	return request(`/account/balance/refill`, {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "POST",
 		token,
 		body: {},
@@ -325,7 +347,8 @@ export async function updateCharactersMetadata({
 	metadata: CharacterMetadata;
 	mode?: "merge" | "replace";
 }): Promise<{ transactionHash: string; data: string }> {
-	return request(`/newbie/contract/characters/me/metadata`, {
+	return request(`/contract/characters/me/metadata`, {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "POST",
 		token,
 		body: { metadata, mode },
@@ -337,7 +360,8 @@ export function getWithdrawProof({
 }: {
 	token: string;
 }): Promise<{ proof: Address; nonce: number; expires: number }> {
-	return request(`/newbie/account/withdraw/proof`, {
+	return request(`/account/withdraw/proof`, {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "GET",
 		token,
 	});
@@ -352,7 +376,8 @@ export function emailTip({
 	noteId?: Numberish;
 	amount: bigint;
 }): Promise<{ transactionHash: string; data: boolean }> {
-	return request(`/newbie/contract/tips`, {
+	return request(`/contract/tips`, {
+		endpoint: getNewbieVillaEndpoint(),
 		method: "POST",
 		token,
 		body,

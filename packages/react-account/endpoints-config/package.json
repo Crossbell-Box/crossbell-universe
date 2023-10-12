@@ -1,0 +1,5 @@
+{
+	"main": "../dist/endpoint-config.js",
+	"module": "../dist/endpoint-config.mjs",
+	"typings": "../dist/endpoint-config.d.ts"
+}

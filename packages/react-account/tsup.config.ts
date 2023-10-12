@@ -13,6 +13,7 @@ export default defineConfig({
 		["modal-config"]: "src/modal-config.ts",
 		["storage-config"]: "src/storage-config.ts",
 		["ssr-config"]: "src/ssr-config.ts",
+		["endpoints-config"]: "src/endpoints-config.ts",
 	},
 	outDir: "dist",
 	format: ["cjs", "esm"],

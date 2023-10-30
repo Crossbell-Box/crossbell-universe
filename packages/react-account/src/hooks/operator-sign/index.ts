@@ -1,4 +1,5 @@
 export * from "./consts";
+export * from "./use-op-sign-config";
 export * from "./use-is-op-sign-enabled";
 export * from "./use-op-sign-balance";
 export * from "./use-toggle-op-sign-operator";

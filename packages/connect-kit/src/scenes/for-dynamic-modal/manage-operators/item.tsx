@@ -8,9 +8,9 @@ import { useRefCallback } from "@crossbell/util-hooks";
 import { usePrimaryCharacter } from "@crossbell/indexer";
 import {
 	NEWBIE_VILLA_OPERATOR_ADDRESS,
-	OP_SIGN_OPERATOR_ADDRESS,
-	useCharacterOperatorPermissions,
 	X_SYNC_OPERATOR_ADDRESS,
+	useCharacterOperatorPermissions,
+	useOpSignConfig,
 } from "@crossbell/react-account";
 
 import commonStyles from "../../../styles.module.css";
@@ -130,11 +130,12 @@ export function useOperatorAvatar(
 	const administratorUrl = useWeb2Url(
 		"ipfs://bafkreib3yzt66fwyeegrinj6ljtjjwpjugcdscepu2iw6kopiaoqsbidtm",
 	);
+	const opSign = useOpSignConfig();
 
 	if (
 		isAddressEqual(characterOperator.operator, NEWBIE_VILLA_OPERATOR_ADDRESS) ||
 		isAddressEqual(characterOperator.operator, X_SYNC_OPERATOR_ADDRESS) ||
-		isAddressEqual(characterOperator.operator, OP_SIGN_OPERATOR_ADDRESS)
+		isAddressEqual(characterOperator.operator, opSign.address)
 	) {
 		return administratorUrl;
 	}

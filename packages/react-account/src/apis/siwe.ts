@@ -5,10 +5,11 @@ import {
 	NoteEntity,
 	NoteMetadata,
 } from "crossbell";
-
 import { type Address } from "viem";
+
 import { request } from "./utils";
 import { BaseSigner } from "../context";
+import { getOpSignEndpoint } from "../endpoints-config";
 
 type Siwe = { token: string };
 
@@ -19,7 +20,8 @@ export async function siweSignIn(signer: BaseSigner): Promise<Siwe> {
 		throw new Error(`SignInError: invalid address ${address}`);
 	}
 
-	const { message } = await request<{ message: string }>("/siwe/challenge", {
+	const { message } = await request<{ message: string }>("/challenge", {
+		endpoint: getOpSignEndpoint(),
 		method: "POST",
 		body: {
 			address,
@@ -29,7 +31,8 @@ export async function siweSignIn(signer: BaseSigner): Promise<Siwe> {
 		},
 	});
 
-	const { token } = await request<{ token: string }>("/siwe/login", {
+	const { token } = await request<{ token: string }>("/login", {
+		endpoint: getOpSignEndpoint(),
 		method: "POST",
 		body: {
 			address,
@@ -41,11 +44,19 @@ export async function siweSignIn(signer: BaseSigner): Promise<Siwe> {
 }
 
 export function siweGetAccount(siwe: Siwe): Promise<{ address: Address }> {
-	return request(`/siwe/account`, { method: "GET", token: siwe.token });
+	return request(`/account`, {
+		endpoint: getOpSignEndpoint(),
+		method: "GET",
+		token: siwe.token,
+	});
 }
 
 export function siweGetBalance(siwe: Siwe): Promise<{ balance: string }> {
-	return request(`/siwe/account/balance`, { method: "GET", token: siwe.token });
+	return request(`/account/balance`, {
+		endpoint: getOpSignEndpoint(),
+		method: "GET",
+		token: siwe.token,
+	});
 }
 
 export async function siweUpdateMetadata({
@@ -59,7 +70,8 @@ export async function siweUpdateMetadata({
 	mode?: "merge" | "replace";
 	metadata: CharacterMetadata;
 }): Promise<{ transactionHash: string; data: string }> {
-	return request(`/siwe/contract/characters/${characterId}/metadata`, {
+	return request(`/contract/characters/${characterId}/metadata`, {
+		endpoint: getOpSignEndpoint(),
 		method: "POST",
 		token: siwe.token,
 		body: { metadata, mode },
@@ -82,8 +94,13 @@ export async function siweLinkNote({
 	data?: string;
 }): Promise<{ transactionHash: string; data: string }> {
 	return request(
-		`/siwe/contract/characters/${fromCharacterId}/links/notes/${characterId}/${noteId}/${linkType}`,
-		{ method: "PUT", token: siwe.token, body: { data } },
+		`/contract/characters/${fromCharacterId}/links/notes/${characterId}/${noteId}/${linkType}`,
+		{
+			endpoint: getOpSignEndpoint(),
+			method: "PUT",
+			token: siwe.token,
+			body: { data },
+		},
 	);
 }
 
@@ -101,8 +118,12 @@ export async function siweUnlinkNote({
 	linkType: string;
 }): Promise<{ transactionHash: string; data: string }> {
 	return request(
-		`/siwe/contract/characters/${fromCharacterId}/links/notes/${characterId}/${noteId}/${linkType}`,
-		{ method: "DELETE", token: siwe.token },
+		`/contract/characters/${fromCharacterId}/links/notes/${characterId}/${noteId}/${linkType}`,
+		{
+			endpoint: getOpSignEndpoint(),
+			method: "DELETE",
+			token: siwe.token,
+		},
 	);
 }
 
@@ -120,8 +141,13 @@ export async function siweLinkCharacter({
 	data?: string;
 }): Promise<{ transactionHash: string; data: string }> {
 	return request(
-		`/siwe/contract/characters/${characterId}/links/characters/${toCharacterId}/${linkType}`,
-		{ method: "PUT", token: siwe.token, body: { data } },
+		`/contract/characters/${characterId}/links/characters/${toCharacterId}/${linkType}`,
+		{
+			endpoint: getOpSignEndpoint(),
+			method: "PUT",
+			token: siwe.token,
+			body: { data },
+		},
 	);
 }
 
@@ -140,7 +166,8 @@ export async function siweLinkCharacters({
 	linkType: string;
 	data?: string;
 }): Promise<{ transactionHash: string; data: string }> {
-	return request(`/siwe/contract/characters/${characterId}/links/characters`, {
+	return request(`/contract/characters/${characterId}/links/characters`, {
+		endpoint: getOpSignEndpoint(),
 		method: "PUT",
 		token: siwe.token,
 		body: { data, linkType, toCharacterIds, toAddresses },
@@ -159,8 +186,12 @@ export async function siweUnlinkCharacter({
 	linkType: string;
 }): Promise<{ transactionHash: string; data: string }> {
 	return request(
-		`/siwe/contract/characters/${characterId}/links/characters/${toCharacterId}/${linkType}`,
-		{ method: "DELETE", token: siwe.token },
+		`/contract/characters/${characterId}/links/characters/${toCharacterId}/${linkType}`,
+		{
+			endpoint: getOpSignEndpoint(),
+			method: "DELETE",
+			token: siwe.token,
+		},
 	);
 }
 
@@ -179,7 +210,8 @@ export async function siwePutNote({
 	transactionHash: string;
 	data: { noteId: number };
 }> {
-	return request(`/siwe/contract/characters/${characterId}/notes`, {
+	return request(`/contract/characters/${characterId}/notes`, {
+		endpoint: getOpSignEndpoint(),
 		method: "PUT",
 		token: siwe.token,
 		body,
@@ -198,8 +230,9 @@ export async function siweUpdateNote({
 	metadata: NoteMetadata;
 }): Promise<{ transactionHash: string; data: string }> {
 	return request(
-		`/siwe/contract/characters/${characterId}/notes/${noteId}/metadata`,
+		`/contract/characters/${characterId}/notes/${noteId}/metadata`,
 		{
+			endpoint: getOpSignEndpoint(),
 			method: "POST",
 			token: siwe.token,
 			body: { metadata },
@@ -216,7 +249,8 @@ export async function siweDeleteNote({
 	characterId: number;
 	noteId: NoteEntity["noteId"];
 }): Promise<{ transactionHash: string; data: string }> {
-	return request(`/siwe/contract/characters/${characterId}/notes/${noteId}`, {
+	return request(`/contract/characters/${characterId}/notes/${noteId}`, {
+		endpoint: getOpSignEndpoint(),
 		method: "DELETE",
 		token: siwe.token,
 	});
@@ -231,12 +265,10 @@ export function siweMintNote({
 	characterId: number;
 	noteId: number;
 }) {
-	return request(
-		`/siwe/contract/characters/${characterId}/notes/${noteId}/minted`,
-		{
-			method: "PUT",
-			token: siwe.token,
-			body: {},
-		},
-	);
+	return request(`/contract/characters/${characterId}/notes/${noteId}/minted`, {
+		endpoint: getOpSignEndpoint(),
+		method: "PUT",
+		token: siwe.token,
+		body: {},
+	});
 }

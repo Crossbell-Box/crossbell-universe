@@ -1,10 +1,8 @@
+import { useContext } from "../../context";
 import { useCharacterOperatorHasPermissions } from "../character-operator";
 
-import {
-	OP_SIGN_OPERATOR_ADDRESS,
-	OP_SIGN_OPERATOR_PERMISSIONS,
-} from "./consts";
-import { useContext } from "@crossbell/react-account";
+import { OP_SIGN_OPERATOR_PERMISSIONS } from "./consts";
+import { useOpSignConfig } from "./use-op-sign-config";
 
 export type UseOPSignOperatorHasPermissionsOptions = {
 	characterId: number | null | undefined;
@@ -14,8 +12,9 @@ export function useOPSignOperatorHasPermissions(
 	options?: UseOPSignOperatorHasPermissionsOptions,
 ) {
 	const { disableOPSign } = useContext();
+	const opSignConfig = useOpSignConfig();
 	const characterOperatorHasPermissions = useCharacterOperatorHasPermissions({
-		operatorAddress: OP_SIGN_OPERATOR_ADDRESS,
+		operatorAddress: opSignConfig.address,
 		permissions: OP_SIGN_OPERATOR_PERMISSIONS,
 		characterId: options?.characterId,
 	});

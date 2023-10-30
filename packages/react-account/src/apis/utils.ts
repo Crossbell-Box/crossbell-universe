@@ -24,7 +24,7 @@ export function request<T = any>(
 		headers.set("Authorization", `Bearer ${token}`);
 	}
 
-	return fetch((endpoint ?? indexer.endpoint) + url, {
+	return fetch((endpoint ?? indexer.endpoint).replace(/\/$/g, "") + url, {
 		method,
 		headers,
 		body: body && stringify(body),

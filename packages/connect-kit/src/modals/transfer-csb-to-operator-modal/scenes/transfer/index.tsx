@@ -1,6 +1,6 @@
 import React from "react";
 import { useRefCallback } from "@crossbell/util-hooks";
-import { OP_SIGN_OPERATOR_ADDRESS } from "@crossbell/react-account";
+import { useOpSignConfig } from "@crossbell/react-account";
 
 import { TransferCSB as Main } from "../../../../components";
 
@@ -15,11 +15,12 @@ export function Transfer() {
 	const onSuccess = useRefCallback(() => {
 		goTo({ kind: SceneKind.transferSuccess });
 	});
+	const { address } = useOpSignConfig();
 
 	return (
 		<div className={styles.container}>
 			<Header title="$CSB Transfer" />
-			<Main toAddress={OP_SIGN_OPERATOR_ADDRESS} onSuccess={onSuccess} />
+			<Main toAddress={address} onSuccess={onSuccess} />
 		</div>
 	);
 }

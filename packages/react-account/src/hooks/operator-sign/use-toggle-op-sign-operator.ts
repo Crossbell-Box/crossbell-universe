@@ -1,9 +1,7 @@
 import { useToggleCharacterOperator } from "../character-operator";
 
-import {
-	OP_SIGN_OPERATOR_ADDRESS,
-	OP_SIGN_OPERATOR_PERMISSIONS,
-} from "./consts";
+import { OP_SIGN_OPERATOR_PERMISSIONS } from "./consts";
+import { useOpSignConfig } from "./use-op-sign-config";
 
 export type UseToggleOpSignOperatorOptions = {
 	characterId: number | null | undefined;
@@ -12,9 +10,10 @@ export type UseToggleOpSignOperatorOptions = {
 export function useToggleOpSignOperator(
 	options?: UseToggleOpSignOperatorOptions,
 ): ReturnType<typeof useToggleCharacterOperator> {
+	const opSignConfig = useOpSignConfig();
 	const [{ hasPermissions, toggleOperator }, mutation] =
 		useToggleCharacterOperator({
-			operatorAddress: OP_SIGN_OPERATOR_ADDRESS,
+			operatorAddress: opSignConfig.address,
 			permissions: OP_SIGN_OPERATOR_PERMISSIONS,
 			characterId: options?.characterId,
 		});

@@ -3,10 +3,11 @@ import { LoadMore, Loading } from "@crossbell/ui";
 import { isAddressEqual } from "viem";
 import { CharacterOperatorEntity } from "crossbell";
 import {
-	OP_SIGN_OPERATOR_ADDRESS,
 	X_SYNC_OPERATOR_ADDRESS,
-	useGetCharacterOperators,
 	NEWBIE_VILLA_OPERATOR_ADDRESS,
+	useGetCharacterOperators,
+	useOpSignConfig,
+	type OpSignConfig,
 } from "@crossbell/react-account";
 
 import styles from "./list.module.css";
@@ -21,6 +22,7 @@ export function List({ characterId }: ListProps) {
 		useGetCharacterOperators({
 			characterId,
 		});
+	const opSignConfig = useOpSignConfig();
 
 	const list = React.useMemo(
 		() =>
@@ -28,15 +30,15 @@ export function List({ characterId }: ListProps) {
 				.flatMap((page) =>
 					page.list.map((characterOperator) => ({
 						characterOperator: characterOperator,
-						tags: getTags(characterOperator),
-						description: getDescription(characterOperator),
+						tags: getTags(characterOperator, { opSignConfig }),
+						description: getDescription(characterOperator, { opSignConfig }),
 					})),
 				)
 				.filter(
 					({ characterOperator }) => characterOperator.permissions.length > 0,
 				)
 				.sort((a, b) => (a.description ? (b.description ? 0 : -1) : 1)) ?? [],
-		[data],
+		[data, opSignConfig],
 	);
 
 	return (
@@ -68,7 +70,10 @@ export function List({ characterId }: ListProps) {
 	);
 }
 
-function getTags(characterOperator: CharacterOperatorEntity): ItemTag[] | null {
+function getTags(
+	characterOperator: CharacterOperatorEntity,
+	{ opSignConfig }: { opSignConfig: OpSignConfig },
+): ItemTag[] | null {
 	if (isAddressEqual(characterOperator.operator, X_SYNC_OPERATOR_ADDRESS)) {
 		return [
 			{
@@ -81,7 +86,7 @@ function getTags(characterOperator: CharacterOperatorEntity): ItemTag[] | null {
 		];
 	}
 
-	if (isAddressEqual(characterOperator.operator, OP_SIGN_OPERATOR_ADDRESS)) {
+	if (isAddressEqual(characterOperator.operator, opSignConfig.address)) {
 		return [
 			{
 				title: "Op Sign",
@@ -120,12 +125,13 @@ function getTags(characterOperator: CharacterOperatorEntity): ItemTag[] | null {
 
 function getDescription(
 	characterOperator: CharacterOperatorEntity,
+	{ opSignConfig }: { opSignConfig: OpSignConfig },
 ): string | null {
 	if (isAddressEqual(characterOperator.operator, X_SYNC_OPERATOR_ADDRESS)) {
 		return "For syncing other platforms' content";
 	}
 
-	if (isAddressEqual(characterOperator.operator, OP_SIGN_OPERATOR_ADDRESS)) {
+	if (isAddressEqual(characterOperator.operator, opSignConfig.address)) {
 		return "For liking, commenting, and minting";
 	}
 

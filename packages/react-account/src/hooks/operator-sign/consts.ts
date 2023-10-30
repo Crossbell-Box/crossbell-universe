@@ -31,6 +31,3 @@ export const OP_SIGN_OPERATOR_PERMISSIONS: CharacterPermissionKey[] = [
 	"POST_NOTE_FOR_ANY_URI",
 	"POST_NOTE",
 ];
-
-export const OP_SIGN_OPERATOR_ADDRESS =
-	"0xbbc2918c9003d264c25ecae45b44a846702c0e7c";

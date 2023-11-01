@@ -7,7 +7,7 @@ import {
 // NewbieVilla
 
 const newbieVillaConfig = proxy({
-	endpoint: "https://indexer.crossbell.io/v1/newbie",
+	endpoint: "https://newbie.crossbell.io/v1/",
 });
 
 export function getNewbieVillaEndpoint() {

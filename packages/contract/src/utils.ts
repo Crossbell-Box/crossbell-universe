@@ -88,7 +88,7 @@ function hasEnoughCsb(amount: Numberish) {
 }
 
 async function checkNetwork(
-	contract: Contract<true>,
+	contract: Contract,
 	showModal: InjectContractCheckerConfig["showSwitchNetworkModal"],
 ) {
 	const isMainnet = await isCrossbellMainnet(contract.walletClient);

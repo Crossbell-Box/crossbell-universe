@@ -35,12 +35,12 @@
 		"@crossbell/util-metadata": "^1.5.13",
 		"@tanstack/react-query": "^4",
 		"classnames": "^2",
-		"crossbell": "^1.6.4",
+		"crossbell": "^1.9.0",
 		"facepaint": "^1.2.1",
 		"react-intersection-observer": "^9.5.2",
-		"react-remove-scroll": "^2.5.6",
+		"react-remove-scroll": "^2.5.7",
 		"react-transition-group": "^4.4.5",
-		"ts-essentials": "^9.4.0"
+		"ts-essentials": "^9.4.1"
 	},
 	"peerDependencies": {
 		"react": "^18",

@@ -71,20 +71,20 @@
 		"@crossbell/util-hooks": "^1.5.13",
 		"@crossbell/util-metadata": "^1.5.13",
 		"check-password-strength": "^2",
-		"crossbell": "^1.6.4",
+		"crossbell": "^1.9.0",
 		"immer": "^10",
 		"lodash.debounce": "4.0.8",
 		"react": "^18",
 		"rxjs": "^7.8.1",
-		"ts-essentials": "^9.4.0",
+		"ts-essentials": "^9.4.1",
 		"valtio": "^1.11.3",
-		"viem": "^1.10.1",
+		"viem": "^1.18.2",
 		"zustand": "^4"
 	},
 	"peerDependencies": {
 		"@tanstack/react-query": "^4"
 	},
 	"devDependencies": {
-		"@types/lodash.debounce": "4.0.7"
+		"@types/lodash.debounce": "4.0.8"
 	}
 }

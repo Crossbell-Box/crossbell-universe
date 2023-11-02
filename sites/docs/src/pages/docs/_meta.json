@@ -5,5 +5,6 @@
 	"notification": "Notification",
 	"x-settings": "xSettings",
 	"modals": "Modals",
-	"hooks": "Hooks"
+	"hooks": "Hooks",
+	"customizing-endpoints": "Customizing Endpoints"
 }

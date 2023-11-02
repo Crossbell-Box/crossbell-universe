@@ -1,0 +1,11 @@
+# Customizing Endpoints
+
+## Newbie Villa
+
+The endpoint for [Newbie Villa Backend Service](https://github.com/Crossbell-Box/newbie-villa) can be customized using the [`setNewbieVillaEndpoint`](https://github.com/Crossbell-Box/crossbell-universe/blob/78b980cf7748303131f90b01a0fbd972c5076964/packages/react-account/src/endpoints-config.ts#L17) function.
+
+```tsx filename="app.tsx"
+import { setNewbieVillaEndpoint } from "@crossbell/react-account/endpoints-config";
+
+setNewbieVillaEndpoint("https://newbie.crossbell.io/v1/");
+```

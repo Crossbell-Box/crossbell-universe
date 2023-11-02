@@ -87,7 +87,7 @@
 		"@typescript-eslint/parser": "^6.9.1",
 		"commander": "^11.1.0",
 		"esbuild": "^0.19.5",
-		"esbuild-css-modules-plugin": "^3.0.3",
+		"esbuild-css-modules-plugin": "^2.7.1",
 		"esbuild-register": "^3.5.0",
 		"eslint": "^8.52.0",
 		"eslint-config-next": "^14.0.1",

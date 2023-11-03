@@ -7,6 +7,6 @@ export type OpSignConfig = {
 };
 
 export const opSignConfig = proxy<OpSignConfig>({
-	endpoint: "https://indexer.crossbell.io/v1/siwe/",
+	endpoint: "https://op-sign.crossbell.io/v1/",
 	address: "0xbbc2918c9003d264c25ecae45b44a846702c0e7c",
 });

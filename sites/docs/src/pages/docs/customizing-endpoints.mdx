@@ -2,10 +2,23 @@
 
 ## Newbie Villa
 
-The endpoint for [Newbie Villa Backend Service](https://github.com/Crossbell-Box/newbie-villa) can be customized using the [`setNewbieVillaEndpoint`](https://github.com/Crossbell-Box/crossbell-universe/blob/78b980cf7748303131f90b01a0fbd972c5076964/packages/react-account/src/endpoints-config.ts#L17) function.
+The endpoint for [Crossbell Newbie Villa Backend Service](https://github.com/Crossbell-Box/newbie-villa) can be customized using the `setNewbieVillaEndpoint` function.
 
 ```tsx filename="app.tsx"
 import { setNewbieVillaEndpoint } from "@crossbell/react-account/endpoints-config";
 
 setNewbieVillaEndpoint("https://newbie.crossbell.io/v1/");
+```
+
+## Operator Sign
+
+The endpoint for [Crossbell Operator Sign Backend Service](https://github.com/Crossbell-Box/operator-sign) can be customized using the `setOpSignEndpoint` function.
+
+```tsx filename="app.tsx"
+import { setOpSignEndpoint } from "@crossbell/react-account/endpoints-config";
+
+setOpSignEndpoint({
+	endpoint: "https://op-sign.crossbell.io/v1",
+	address: "0xbbc2918c9003d264c25ecae45b44a846702c0e7c", // It is the same as the `OP_SIGN_OPERATOR_WALLET_ADDRESS` env variable in your Operator Sign backend service.
+});
 ```

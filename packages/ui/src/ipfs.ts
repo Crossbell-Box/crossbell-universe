@@ -5,7 +5,7 @@ export type GetWeb2Url = (ipfs: string) => string;
 export const UseWeb2UrlContext = React.createContext<GetWeb2Url | null>(null);
 
 const defaultFn: GetWeb2Url = (ipfs) => {
-	return ipfs.replace(/^ipfs:\/\//, "https://ipfs.4everland.xyz/ipfs/");
+	return ipfs.replace(/^ipfs:\/\//, "https://ipfs.crossbell.io/ipfs/");
 };
 
 export function useGetWeb2Url() {

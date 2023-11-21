@@ -18,15 +18,15 @@
 		"@crossbell/util-ethers": "^1.5.17",
 		"@crossbell/util-hooks": "^1.5.17",
 		"@crossbell/util-metadata": "^1.5.17",
-		"@sentry/react": "^7.77.0",
-		"@sentry/tracing": "^7.77.0",
-		"next": "13.4.19",
+		"@sentry/react": "^7.81.1",
+		"@sentry/tracing": "^7.81.1",
+		"next": "14.0.3",
 		"nextra": "^2.13.2",
 		"nextra-theme-docs": "^2.13.2",
 		"outdent": "^0.8.0"
 	},
 	"devDependencies": {
-		"@next/bundle-analyzer": "^14.0.1",
+		"@next/bundle-analyzer": "^14.0.3",
 		"autoprefixer": "^10.4.16",
 		"postcss": "^8.4.31",
 		"tailwindcss": "^3.3.5"

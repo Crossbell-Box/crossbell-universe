@@ -77,14 +77,14 @@
 		"react": "^18",
 		"rxjs": "^7.8.1",
 		"ts-essentials": "^9.4.1",
-		"valtio": "^1.11.3",
-		"viem": "^1.18.2",
+		"valtio": "^1.12.0",
+		"viem": "^1.19.6",
 		"zustand": "^4"
 	},
 	"peerDependencies": {
 		"@tanstack/react-query": "^4"
 	},
 	"devDependencies": {
-		"@types/lodash.debounce": "4.0.8"
+		"@types/lodash.debounce": "4.0.9"
 	}
 }

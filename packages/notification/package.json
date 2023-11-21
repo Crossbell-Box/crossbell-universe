@@ -36,8 +36,8 @@
 		"classnames": "^2",
 		"dayjs": "^1.11.10",
 		"react-intersection-observer": "^9",
-		"viem": "^1.18.2",
-		"zustand": "^4.4.1"
+		"viem": "^1.19.6",
+		"zustand": "^4.4.6"
 	},
 	"peerDependencies": {
 		"@tanstack/react-query": "^4",

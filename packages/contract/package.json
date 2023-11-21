@@ -30,7 +30,7 @@
 	"dependencies": {
 		"@crossbell/util-hooks": "^1.5.17",
 		"crossbell": "^1.9.0",
-		"viem": "^1.18.2"
+		"viem": "^1.19.6"
 	},
 	"peerDependencies": {
 		"react": "^18"

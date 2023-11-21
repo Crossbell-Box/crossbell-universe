@@ -61,8 +61,8 @@ export function InputEmailToResetPassword1() {
 									cursor: store.computed.isPending
 										? "progress"
 										: store.computed.canSendCode
-										? "pointer"
-										: "not-allowed",
+										  ? "pointer"
+										  : "not-allowed",
 								}}
 								onClick={() => store.sendCode()}
 							>

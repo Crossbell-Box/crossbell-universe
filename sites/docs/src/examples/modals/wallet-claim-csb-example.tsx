@@ -45,8 +45,8 @@ export function WalletClaimCSBExample() {
 							{isLoading
 								? "Checking Eligibility"
 								: isEligibleToClaim
-								? "Claim $CSB"
-								: errorMsg}
+								  ? "Claim $CSB"
+								  : errorMsg}
 						</button>
 					) : (
 						<>

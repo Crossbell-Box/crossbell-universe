@@ -37,11 +37,11 @@ export function useAccountMiraBalance(): UseAccountMiraBalanceResult {
 						characterId: account.characterId,
 				  })
 				: address
-				? getAddressMiraBalance({
-						contract,
-						address: address!,
-				  })
-				: null,
+				  ? getAddressMiraBalance({
+							contract,
+							address: address!,
+				    })
+				  : null,
 		{ enabled: !!address || !!account?.characterId },
 	);
 

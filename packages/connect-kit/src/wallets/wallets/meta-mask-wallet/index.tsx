@@ -75,8 +75,8 @@ export const metaMaskWallet = (
 						return isAndroid()
 							? uri
 							: isIOS()
-							? `metamask://wc?uri=${encodeURIComponent(uri)}`
-							: `https://metamask.app.link/wc?uri=${encodeURIComponent(uri)}`;
+							  ? `metamask://wc?uri=${encodeURIComponent(uri)}`
+							  : `https://metamask.app.link/wc?uri=${encodeURIComponent(uri)}`;
 					},
 				};
 			} else {

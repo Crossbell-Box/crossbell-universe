@@ -3,7 +3,7 @@ import type { SVGProps } from "react";
 import { Ref, forwardRef } from "react";
 const SvgLightBulb = (
 	props: SVGProps<SVGSVGElement>,
-	ref: Ref<SVGSVGElement>
+	ref: Ref<SVGSVGElement>,
 ) => (
 	<svg
 		xmlns="http://www.w3.org/2000/svg"

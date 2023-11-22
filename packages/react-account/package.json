@@ -1,6 +1,6 @@
 {
 	"name": "@crossbell/react-account",
-	"version": "1.5.17",
+	"version": "1.5.18",
 	"license": "MIT",
 	"repository": "github:Crossbell-Box/crossbell-universe",
 	"bugs": "https://github.com/Crossbell-Box/crossbell-universe/issues",
@@ -65,11 +65,11 @@
 		"./package.json": "./package.json"
 	},
 	"dependencies": {
-		"@crossbell/contract": "^1.5.17",
-		"@crossbell/indexer": "^1.5.17",
-		"@crossbell/util-ethers": "^1.5.17",
-		"@crossbell/util-hooks": "^1.5.17",
-		"@crossbell/util-metadata": "^1.5.17",
+		"@crossbell/contract": "^1.5.18",
+		"@crossbell/indexer": "^1.5.18",
+		"@crossbell/util-ethers": "^1.5.18",
+		"@crossbell/util-hooks": "^1.5.18",
+		"@crossbell/util-metadata": "^1.5.18",
 		"check-password-strength": "^2",
 		"crossbell": "^1.9.0",
 		"immer": "^10",

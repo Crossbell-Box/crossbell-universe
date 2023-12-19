@@ -7,7 +7,6 @@ import {
 } from "@crossbell/ui";
 import { extractCharacterName } from "@crossbell/util-metadata";
 import { CharacterEntity } from "crossbell";
-import { ScrollArea } from "@mantine/core";
 import {
 	useAccountState,
 	useToggleOpSignOperator,
@@ -43,7 +42,7 @@ export function List({
 	const isWalletConnected = useAccountState((s) => !!s.wallet);
 
 	return (
-		<ScrollArea.Autosize mah="70vh">
+		<div className={styles.layout}>
 			<OptionList className={styles.container}>
 				{characters.map((character) => (
 					<HooksRenderer
@@ -111,6 +110,6 @@ export function List({
 					</OptionListItem>
 				)}
 			</OptionList>
-		</ScrollArea.Autosize>
+		</div>
 	);
 }

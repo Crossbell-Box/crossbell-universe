@@ -1,5 +1,4 @@
 import React from "react";
-import { ScrollArea } from "@mantine/core";
 import { LoadMore } from "@crossbell/ui";
 import { useAccountCharacters } from "@crossbell/react-account";
 
@@ -11,7 +10,7 @@ export function Characters() {
 		useAccountCharacters();
 
 	return (
-		<ScrollArea.Autosize mah="50vh">
+		<div className={styles.layout}>
 			<div className={styles.container}>
 				{characters.map((character) => (
 					<Item key={character.characterId} character={character} />
@@ -23,6 +22,6 @@ export function Characters() {
 					isLoading={isFetchingNextPage}
 				/>
 			</div>
-		</ScrollArea.Autosize>
+		</div>
 	);
 }

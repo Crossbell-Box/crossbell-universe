@@ -1,5 +1,10 @@
+.layout {
+	max-height: 50vh;
+	overflow-y: auto;
+}
+
 .container {
-    display: flex;
-    flex-direction: column;
-    gap: 12px;
+	display: flex;
+	flex-direction: column;
+	gap: 12px;
 }

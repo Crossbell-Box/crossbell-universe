@@ -1,3 +1,8 @@
+.layout {
+	max-height: 70vh;
+	overflow-y: auto;
+}
+
 .container {
 	margin-bottom: 16px;
 }

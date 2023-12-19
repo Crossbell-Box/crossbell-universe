@@ -71,7 +71,7 @@
 		"@crossbell/util-hooks": "^1.5.19",
 		"@crossbell/util-metadata": "^1.5.19",
 		"check-password-strength": "^2",
-		"crossbell": "^1.11.1",
+		"crossbell": "^1.10.1",
 		"immer": "^10",
 		"lodash.debounce": "4.0.8",
 		"react": "^18",

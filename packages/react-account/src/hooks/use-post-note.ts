@@ -42,7 +42,7 @@ export const usePostNote = createAccountTypeBasedMutationHooks<
 
 				const canUseSiwe = specifiedCharacterId
 					? // TODO: Check if the specified characterId belongs to the current wallet, not just the one currently in use.
-					  specifiedCharacterId === account?.characterId
+						specifiedCharacterId === account?.characterId
 					: true;
 
 				if (siwe && canUseSiwe) {

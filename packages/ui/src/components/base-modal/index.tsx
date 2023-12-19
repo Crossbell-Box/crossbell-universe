@@ -77,6 +77,6 @@ export function BaseModal({
 					</div>
 				</BaseModalContext.Provider>,
 				document.body,
-		  )
+			)
 		: null;
 }

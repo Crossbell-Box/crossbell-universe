@@ -44,6 +44,6 @@ export function Dialog({
 					{children}
 				</div>,
 				document.body,
-		  )
+			)
 		: null;
 }

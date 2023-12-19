@@ -65,7 +65,7 @@ export function WalletClaimCSB({
 		: false;
 	const tweetContent = account
 		? getTweetContent?.(account) ||
-		  `Requesting $CSB funds from the Faucet on the #Crossbell blockchain. Address: ${account?.address}. https://faucet.crossbell.io/`
+			`Requesting $CSB funds from the Faucet on the #Crossbell blockchain. Address: ${account?.address}. https://faucet.crossbell.io/`
 		: "";
 	const tweetContentNode =
 		(account && getTweetContentNode?.(account)) || tweetContent;

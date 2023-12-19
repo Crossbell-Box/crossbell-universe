@@ -18,6 +18,6 @@ export const okxWallet = (connector?: OKXConnector): Wallet | null => {
 				installed: installed,
 				icon: <OKXIcon className={styles.icon} />,
 				createConnector: () => ({ connector }),
-		  }
+			}
 		: null;
 };

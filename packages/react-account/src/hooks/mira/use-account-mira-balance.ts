@@ -35,13 +35,13 @@ export function useAccountMiraBalance(): UseAccountMiraBalanceResult {
 				? getCharacterMiraBalance({
 						contract,
 						characterId: account.characterId,
-				  })
+					})
 				: address
-				  ? getAddressMiraBalance({
+					? getAddressMiraBalance({
 							contract,
 							address: address!,
-				    })
-				  : null,
+						})
+					: null,
 		{ enabled: !!address || !!account?.characterId },
 	);
 

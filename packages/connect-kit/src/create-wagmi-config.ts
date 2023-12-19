@@ -76,7 +76,7 @@ export function createWagmiConfig({
 						showQrModal: false,
 						projectId: walletConnectV2ProjectId,
 					},
-			  })
+				})
 			: null,
 	]);
 

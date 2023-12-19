@@ -107,7 +107,7 @@ function useMintModel({
 						avatar: null,
 						handle: form.handle,
 						username: form.username,
-				  },
+					},
 		);
 	});
 

@@ -38,11 +38,11 @@ export const useTip = createAccountTypeBasedMutationHooks<void, UseTipOptions>(
 									...options,
 									toNoteId,
 									feeReceiver,
-							  })
+								})
 							: contract.tips.tipCharacterForNote({
 									...options,
 									toNoteId,
-							  });
+								});
 					} else {
 						return feeReceiver
 							? contract.tipsWithFee.tipCharacter({ ...options, feeReceiver })

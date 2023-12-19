@@ -51,13 +51,13 @@ export function ConnectButton({ children }: ConnectButtonProps): JSX.Element {
 							account,
 							displayAddress:
 								account?.type === "email" ? account.email : account?.address,
-					  }
+						}
 					: {
 							isConnected: false,
 							ssrReady,
 							account,
 							displayAddress: null,
-					  },
+						},
 				{
 					connect: connectModal.show,
 					disconnect: disconnectModal.show,

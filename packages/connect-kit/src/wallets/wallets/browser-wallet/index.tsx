@@ -20,6 +20,6 @@ export const browserWallet = (connector?: InjectedConnector): Wallet | null => {
 					return { connector };
 				},
 				icon: <WalletIcon className={styles.icon} />,
-		  }
+			}
 		: null;
 };

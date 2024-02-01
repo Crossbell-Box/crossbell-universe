@@ -76,8 +76,7 @@ export function createWagmiConfig({
 			options: {
 				name: "Crossbell",
 				logo: "https://crossbell.io/logos/crossbell.svg",
-				joyidAppURL: "https://testnet.joyid.dev", // Used for testing
-				// joyidAppURL: "https://app.joy.id",
+				joyidAppURL: "https://app.joy.id",
 			},
 		}),
 		walletConnectV2ProjectId

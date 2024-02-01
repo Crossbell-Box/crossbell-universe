@@ -10,6 +10,7 @@ import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { w3mProvider } from "@web3modal/ethereum";
 import compact from "lodash.compact";
+import { JoyIdConnector } from "@joyid/wagmi";
 
 import {
 	CoinbaseWalletConnector,
@@ -68,6 +69,15 @@ export function createWagmiConfig({
 			options: {
 				appName,
 				headlessMode: true,
+			},
+		}),
+		new JoyIdConnector({
+			chains,
+			options: {
+				name: "Crossbell",
+				logo: "https://crossbell.io/logos/crossbell.svg",
+				joyidAppURL: "https://testnet.joyid.dev", // Used for testing
+				// joyidAppURL: "https://app.joy.id",
 			},
 		}),
 		walletConnectV2ProjectId

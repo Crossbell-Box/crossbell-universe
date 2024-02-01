@@ -40,6 +40,7 @@
 		"@crossbell/util-hooks": "^1.5.20",
 		"@crossbell/util-metadata": "^1.5.20",
 		"@emotion/react": "^11",
+		"@joyid/wagmi": "^0.1.0",
 		"@mantine/core": "^6",
 		"@mantine/hooks": "^6",
 		"@mantine/notifications": "^6",

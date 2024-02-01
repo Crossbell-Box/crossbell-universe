@@ -2,6 +2,7 @@ import React from "react";
 import { Connector, useConfig } from "wagmi";
 import compact from "lodash.compact";
 
+import type { JoyIdConnector } from "@joyid/wagmi";
 import type { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import type { CoinbaseWalletConnector } from "wagmi/connectors/coinbaseWallet";
 import type { InjectedConnector } from "wagmi/connectors/injected";
@@ -12,6 +13,7 @@ import { metaMaskWallet } from "./meta-mask-wallet";
 import { coinbaseWallet } from "./coinbase-wallet";
 import { okxWallet } from "./okx-wallet";
 import { browserWallet } from "./browser-wallet";
+import { joyidWallet } from "./joyid-wallet";
 
 enum KnownConnector {
 	metaMask = "metaMask",
@@ -19,6 +21,7 @@ enum KnownConnector {
 	coinbaseWallet = "coinbaseWallet",
 	injected = "injected",
 	walletConnect = "walletConnect",
+	joyid = "joyid",
 }
 
 type ConnectorMap = Partial<{
@@ -27,6 +30,7 @@ type ConnectorMap = Partial<{
 	[KnownConnector.coinbaseWallet]: CoinbaseWalletConnector;
 	[KnownConnector.injected]: InjectedConnector;
 	[KnownConnector.walletConnect]: WalletConnectConnector;
+	[KnownConnector.joyid]: JoyIdConnector;
 }>;
 
 export function useWalletConnectors() {
@@ -41,6 +45,7 @@ export function useWalletConnectors() {
 			compact([
 				okxWallet(connectorMap.okx),
 				metaMaskWallet(connectorMap.metaMask, connectorMap.walletConnect),
+				joyidWallet(connectorMap.joyid),
 				coinbaseWallet(connectorMap.coinbaseWallet),
 				browserWallet(connectorMap.injected),
 			]),

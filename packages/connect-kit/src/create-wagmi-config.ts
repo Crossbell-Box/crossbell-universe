@@ -10,12 +10,12 @@ import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { w3mProvider } from "@web3modal/ethereum";
 import compact from "lodash.compact";
-import { JoyIdConnector } from "@joyid/wagmi";
 
 import {
 	CoinbaseWalletConnector,
 	OKXConnector,
 	WalletConnectConnector,
+	JoyIdConnector,
 } from "./wallets";
 
 export type GetDefaultClientConfigOptions = Omit<

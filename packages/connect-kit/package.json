@@ -49,7 +49,7 @@
 		"canvas-confetti": "^1",
 		"check-password-strength": "^2",
 		"classnames": "^2",
-		"crossbell": "^1.10.1",
+		"crossbell": "^1.11.3",
 		"embla-carousel-react": "^7",
 		"immer": "^10",
 		"lodash.compact": "^3",

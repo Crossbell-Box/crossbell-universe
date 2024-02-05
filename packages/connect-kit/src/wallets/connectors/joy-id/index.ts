@@ -1,5 +1,9 @@
 import { JoyIdConnector as BaseConnector } from "@joyid/wagmi";
 
+export type JoyIdConnectorOptions = ConstructorParameters<
+	typeof BaseConnector
+>[0];
+
 export class JoyIdConnector extends BaseConnector {
 	async getProvider(config?: { chainId?: number }) {
 		const provider = await super.getProvider(config);

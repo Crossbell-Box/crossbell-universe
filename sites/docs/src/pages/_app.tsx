@@ -16,6 +16,14 @@ import { NotificationModal } from "@crossbell/notification";
 const wagmiConfig = createWagmiConfig({
 	appName: "Crossbell Dev",
 	walletConnectV2ProjectId: "34f3719cffb8e8f578f137c91c01d235",
+	joyIdOptions: {
+		name: "Crossbell",
+		logo: "https://crossbell.io/logos/crossbell.svg",
+		joyidAppURL:
+			process.env.NODE_ENV === "development"
+				? "https://testnet.joyid.dev"
+				: "https://app.joy.id",
+	},
 });
 
 const queryClient = new QueryClient();

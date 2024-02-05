@@ -9,6 +9,7 @@ import { publicProvider } from "wagmi/providers/public";
 import { InjectedConnector } from "wagmi/connectors/injected";
 import { MetaMaskConnector } from "wagmi/connectors/metaMask";
 import { w3mProvider } from "@web3modal/ethereum";
+
 import compact from "lodash.compact";
 
 import {
@@ -16,6 +17,7 @@ import {
 	OKXConnector,
 	WalletConnectConnector,
 	JoyIdConnector,
+	JoyIdConnectorOptions,
 } from "./wallets";
 
 export type GetDefaultClientConfigOptions = Omit<
@@ -24,11 +26,13 @@ export type GetDefaultClientConfigOptions = Omit<
 > & {
 	appName: string;
 	walletConnectV2ProjectId?: string;
+	joyIdOptions?: JoyIdConnectorOptions["options"];
 };
 
 export function createWagmiConfig({
 	appName,
 	walletConnectV2ProjectId,
+	joyIdOptions,
 	...restConfig
 }: GetDefaultClientConfigOptions): Config {
 	const { chains, publicClient, webSocketPublicClient } = configureChains(
@@ -71,14 +75,11 @@ export function createWagmiConfig({
 				headlessMode: true,
 			},
 		}),
-		new JoyIdConnector({
-			chains,
-			options: {
-				name: "Crossbell",
-				logo: "https://crossbell.io/logos/crossbell.svg",
-				joyidAppURL: "https://app.joy.id",
-			},
-		}),
+		joyIdOptions &&
+			new JoyIdConnector({
+				chains,
+				options: joyIdOptions,
+			}),
 		walletConnectV2ProjectId
 			? new WalletConnectConnector({
 					options: {

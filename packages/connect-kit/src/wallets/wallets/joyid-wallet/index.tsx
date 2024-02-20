@@ -14,7 +14,7 @@ export const joyidWallet = (connector?: JoyIdConnector): Wallet | null => {
 	return installed
 		? {
 				id: "joyid",
-				name: "JoyID",
+				name: "JoyID Passkey",
 				installed: installed,
 				icon: <JoyidIcon className={styles.icon} />,
 				createConnector: () => ({ connector }),

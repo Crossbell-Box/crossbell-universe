@@ -5,10 +5,6 @@ export type JoyIdConnectorOptions = ConstructorParameters<
 >[0];
 
 export class JoyIdConnector extends BaseConnector {
-	async isAuthorized() {
-		return !!(await this.getAccount());
-	}
-
 	async getProvider(config?: { chainId?: number }) {
 		const provider = await super.getProvider(config);
 		const account = await this.getAccount();

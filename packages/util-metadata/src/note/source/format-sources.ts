@@ -12,11 +12,19 @@ export type FormattedSource = {
 
 export function formatSources(note: NoteEntity): FormattedSource[] {
 	const metadata = note.metadata?.content;
-	const sources = metadata?.sources ?? [];
+	const sources = toArray(metadata?.sources);
 
 	return sources.map((source) => ({
 		name: source,
 		type: getSourceType(source),
 		link: getSourceLink(source, metadata),
 	}));
+}
+
+function toArray(value: string | string[] | undefined): string[] {
+	if (Array.isArray(value)) {
+		return value;
+	} else {
+		return value ? [value] : [];
+	}
 }
